@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <style>
+            body{
+                background-color:black;
+                background-image: url("background1-720.png");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            
+            div{
+                /*border-bottom: 1px solid #efefef;*/
+                margin: 20px auto;
+                padding-bottom: 10px;
+                width: 400px;
+                /*background-color: blue;*/
+                position: relative;
+                
+                 
+            }
+            h1{
+                text-align: center;
+                color:aliceblue;
+                font-family: fantasy;
+                font-size: 40px;
+            }
+            .title{
+                float: left;
+                width: 100px;
+                text-align: left;
+                padding-right: 10px;
+                font-family: fantasy;
+                font-size: 22px;
+                color: aliceblue;
+            }
+            .submit{
+                text-align: right;
+            }
+            .offline{
+                text-align: right;
+            }
+            /*input[type=button]{
+                background-color: palegreen;
+            }*/
+
+        </style>
+    </head>
+
+    <body>
+        <div>
+            <div>
+                <h1>Login</h1>
+            </div>
+            <form action="example.php" method="post">
+                <div>
+                    <label for="name" class="title">Username:</label>
+                    <input type="text" id="name" name="name" />
+                </div>
+                <div>
+                    <label for="email" class="title">Email:</label>
+                    <input type="email" id="email" name="email" />
+                </div>
+                <div>
+                    <label for="password" class="title">Password:</label>
+                    <input type="password" id="password" name="password" />
+                </div>
+                <div class="submit">
+                    <input type="submit" value="Register" id="submit" />
+                </div>
+                <div class="offline">
+                        <input type="button" value="Play Offline">
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
