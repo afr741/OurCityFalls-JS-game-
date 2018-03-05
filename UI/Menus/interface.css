@@ -4,6 +4,7 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 h1{
     color:aliceblue;
     font-family: fantasy;
@@ -18,14 +19,15 @@ div{
     width: 400px;
     /*background-color: blue;*/
     position: relative;
-    text-align: center;
-     
+    text-align: center;    
 }
+
 label{
     font-family: fantasy;
     font-size: 20px;
     color: aliceblue;
 }
+
 #inputControls{
     width: 70px;
 }
@@ -43,6 +45,7 @@ label{
 .submit{
     text-align: right;
 }
+
 .offline{
     text-align: right;
 }

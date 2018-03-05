@@ -1,27 +1,35 @@
 <html>
-        <head>
-            <link rel="stylesheet" href="interface.css">
-        </head>
+    <head>
+        <meta charset="utf-8">
+        <!-- Bootstrap resources -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     
-        <body>
+        <!-- Other resources -->
+        <link rel="stylesheet" href="interface.css">
+        <script type="text/javascript" src="mainMenu.js"></script>
+    </head>
+
+    <body>
+        <div>
             <div>
-                <div>
-                    <h1>Options</h1>
-                </div>
-                <div>
-                    <input type="button" value="Controls"/> 
-                </div>
-                <div>
-                    <input type="button" value="Audio"/>
-                </div>
-                <div>
-                    <input type="button" value="Difficulty"/>
-                </div>
-                
-                <div>
-                    <input type="button" value="Back"/>
-                </div>
-                
+                <h1>Options</h1>
             </div>
-        </body>
+            <div>
+                <input type="button" value="Controls"/> 
+            </div>
+            <div>
+                <input type="button" value="Audio"/>
+            </div>
+            <div>
+                <input type="button" value="Difficulty"/>
+            </div>
+            
+            <div>
+                <input type="button" onclick="goBack()" value="Back"/>
+            </div>
+        </div>
+    </body>
 </html>

@@ -1,32 +1,31 @@
 <html>
-        <head>
-            <link rel="stylesheet" href="interface.css">
-        </head>
-    
-        <body>
+    <head>
+        <meta charset="utf-8">
+        <!-- Bootstrap resources -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <!-- Other resources -->
+        <link rel="stylesheet" href="interface.css">
+        <script type="text/javascript" src="mainMenu.js"></script>
+    </head>
+
+    <body>
+        <div>
             <div>
-                <div>
-                    <h1>Zombie Game</h1>
-                </div>
-                <div>
-                    <input type="button" value="New Game"/> 
-                </div>
-                <div>
-                    <input type="button" value="Load Game"/>
-                </div>
-                <div>
-                    <input type="button" value="Level Editor"/>
-                </div>
-                <div>
-                    <input type="button" value="Options"/>
-                </div>
-                <div>
-                    <input type="button" value="Profile"/>
-                </div>
-                <div>
-                    <input type="button" value="Exit"/>
-                </div>
-                
+                <h1>Zombie Game</h1>
             </div>
-        </body>
+
+            <div class="btn-group-vertical">
+                <button tpye="button" onclick="location.href=''" class="btn btn-default">New Game</button>
+                <button type="button" onclick="location.href='loadGamePage.html'" class="btn btn-default">Load Game</button>
+                <button type="button" onclick="location.href='levelEditorMenu.html'" class="btn btn-default">Level Editor</button>
+                <button type="button" onclick="location.href='options.html'" class="btn btn-default">Options</button>
+                <button type="button" onclick="location.href=''" class="btn btn-default">Profile</button>
+                <button type="button" onclick="location.href=''" class="btn btn-default">Exit</button>
+            </div>
+        </div>  
+    </body>
     </html>
