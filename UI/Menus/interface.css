@@ -1,14 +1,19 @@
-body{
-    background-color:black;
-    background-image: url("background1-720.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+body {
+  font-family: arial, sans-serif;
+  font-size: 30px;
+  background-color: black;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+  
 }
 
 h1{
     color:aliceblue;
     font-family: fantasy;
-    font-size: 40px;
+    font-size: 55px;
 }
 
 div{
@@ -19,7 +24,8 @@ div{
     width: 400px;
     /*background-color: blue;*/
     position: relative;
-    text-align: center;    
+    text-align: center;
+    color: white;
 }
 
 label{
@@ -27,6 +33,23 @@ label{
     font-size: 20px;
     color: aliceblue;
 }
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0
+}
+li {
+  padding: 10px 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+
 
 #inputControls{
     width: 70px;
