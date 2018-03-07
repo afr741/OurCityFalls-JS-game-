@@ -10,9 +10,9 @@
         // }
     
         // // $('#progress').hide();
-        // $('#main').show();
-        // $('#menu').addClass('main');
-        // $('.sound').show();
+        $('#main').show();
+        $('#menu').addClass('main');
+        $('.sound').show();
     }
 
     /**
