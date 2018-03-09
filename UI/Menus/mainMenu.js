@@ -9,25 +9,61 @@
         //   }
         // }
     
-        // // $('#progress').hide();
+        // $('#progress').hide();
         $('#main').show();
         $('#menu').addClass('main');
-        $('.sound').show();
+        // $('.sound').show();
     }
 
     /**
      * Click handlers for the different menu screens
      */
-    $('.credits').click(function() {
+    $('.loadGame').click(function() {
         $('#main').hide();
-        $('#credits').show();
-        $('#menu').addClass('credits');
+        $('#loadGame').show();
+        $('#menu').addClass('loadGame');
+    });
+
+    $('.levelEditor').click(function() {
+        $('#main').hide();
+        $('#levelEditor').show();
+        $('#menu').addClass('levelEditor');
+    });
+
+    $('.profile').click(function() {
+        $('#main').hide();
+        $('#profile').show();
+        $('#menu').addClass('profile');
+    });
+
+    $('.options').click(function() {
+        $('#main').hide();
+        $('#options').show();
+        $('#menu').addClass('options');
     });
 
     $('.back').click(function() {
-        $('#credits').hide();
+        $('#loadGame').hide();
         $('#main').show();
-        $('#menu').removeClass('credits');
+        $('#menu').removeClass('#loadGame');
+    });
+
+    $('.back').click(function() {
+        $('#levelEditor').hide();
+        $('#main').show();
+        $('#menu').removeClass('#levelEditor');
+    });
+
+    $('.back').click(function() {
+        $('#options').hide();
+        $('#main').show();
+        $('#menu').removeClass('#options');
+    });
+
+    $('.back').click(function() {
+        $('#profile').hide();
+        $('#main').show();
+        $('#menu').removeClass('#profile');
     });
 
     // $('.sound').click(function() {
@@ -72,4 +108,5 @@
     //     window.history.back();
     // }
     
+    mainMenu();
 })(jQuery);
