@@ -10,7 +10,7 @@
         // }
     
         // $('#progress').hide();
-        $('#main').show();
+        $('#login').show();
         $('#menu').addClass('main');
         // $('.sound').show();
     }
@@ -18,6 +18,12 @@
     /**
      * Click handlers for the different menu screens
      */
+    $('.offline').click(function() {
+        $('#login').hide();
+        $('#main').show();
+        $('#menu').addClass('main');
+    });
+
     $('.loadGame').click(function() {
         $('#main').hide();
         $('#loadGame').show();
@@ -42,6 +48,9 @@
         $('#menu').addClass('options');
     });
 
+    /*
+    * Click handlers of back button function for the different menu screens
+    */
     $('.back').click(function() {
         $('#loadGame').hide();
         $('#main').show();
@@ -95,18 +104,6 @@
         $('#menu').hide();
         startGame();
     });
-
-    $('.restart').click(function() {
-        $('#game-over').hide();
-        startGame();
-    });
-
-    /*
-    * Back button function, goes to previous page.
-    */
-    // function goBack() {
-    //     window.history.back();
-    // }
     
     mainMenu();
 })(jQuery);

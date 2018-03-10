@@ -14,7 +14,7 @@ h1{
     color:aliceblue;
     font-family: fantasy;
     font-size: 55px;
-    border-bottom: 5px darkred;
+    text-shadow: 5px 5px darkred;
     margin: 0px 0px 100px 0px;
 }
 
@@ -129,6 +129,7 @@ a {
 
 .submit{
     text-align: right;
+    color: darkred;
 }
 
 .offline{
