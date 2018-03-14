@@ -21,7 +21,7 @@ h1{
 div{
     /*border-bottom: 1px solid #efefef;*/
     margin: 10px auto;
-    padding-top: 50px;
+    padding-top: 30px;
     padding-bottom: 10px;
     width: 400px;
     /*background-color: blue;*/
@@ -57,7 +57,7 @@ a {
 #menu {
     position: absolute;
     width: 100%;
-    height: 1000%;
+    height: 1000px;
     border: 1px solid black;
     z-index: 2;
     text-align: center;

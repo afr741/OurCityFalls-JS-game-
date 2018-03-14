@@ -10,7 +10,7 @@
         // }
     
         // $('#progress').hide();
-        $('#login').show();
+        $('#main').show();
         $('#menu').addClass('main');
         // $('.sound').show();
     }
