@@ -1,43 +1,4 @@
 
-class Pixel {
-    constructor(img, width = 18, height = 16) {
-        this.img = img;
-        this.width = width;
-        this.height = height;
-        this.bricks = new Map(); // create a map to save the subset image(supplier).
-    }
-
-    locate(name, x, y,width, height) { // creating the subset img by allocating the position of it.
-        var supplier = document.createElement('canvas');
-        supplier.height = height;
-        supplier.width = width;
-        supplier
-            .getContext('2d')
-            .drawImage(
-                this.img,
-                x,
-                y,
-                width,
-                height,
-                0,
-                0,
-                width,
-                height);
-        this.bricks.set(name, supplier); // add the subset image(supplier) to the map.
-    }
-   
-    build(name, ctx, x, y) {
-        var supplier = this.bricks.get(name);
-        ctx.drawImage(supplier, x, y);
-    }
-    locateBrick(name,x,y){
-        this.locate(name,x * this.width, y * this.height,this.width,this.height);
-        }
-    buildBrick(name, ctx, x, y) {
-        this.build(name, ctx, x * this.width, y * this.height);
-    }
-}
-
 class OrderedLayers {   // Draw all the layers in order.    
     constructor(){
     this.layers = [];   
@@ -49,6 +10,37 @@ class OrderedLayers {   // Draw all the layers in order.
     }
 };
     
+class DrawingPixel {    
+    constructor(img, width, height) {
+        this.img = img;
+        this.width = width;
+        this.height = height;
+        this.bricks = new Map(); // create a map to save the subset image(supplier).
+    }
+
+    locate(name, x, y,width, height) { // creating a locate method where we can extract a subset of an img by allocating the position of the subset.
+        var supplier = document.createElement('canvas'); // save the subset image to a supplier in order to simplify the process of adding subset images efficiently. 
+        supplier.height = height; // Assigning subset img measurement to the supplier.
+        supplier.width = width; //------
+        supplier
+        .getContext('2d').drawImage(this.img,x,y, //subset img properties
+        width,height,0,0,width,height); //Size of the subset.
+        this.bricks.set(name, supplier); // add the subset image to the map.
+    }
+   
+    build(name, ctx, x, y) { // Sketch the subset.
+        var supplier = this.bricks.get(name); 
+        ctx.drawImage(supplier, x, y);
+    }
+    locateBrick(name,x,y){  // sketch the subsete with width and height for the Background tiles.
+        this.locate(name,x * this.width, y * this.height,this.width,this.height);
+        }
+    buildBrick(name, ctx, x, y) {
+        this.build(name, ctx, x * this.width, y * this.height);
+    }
+}
+
+
 class Vector {
     constructor(x,y){
         this.set(x,y);
@@ -79,7 +71,7 @@ class Entity {
 }
 }
 class Feature {
-    constructor(name) { //name may be run or jump
+    constructor(name) { //name may be featureJump, FeatureVel or FeatureForward.
         this.NAME = name;
     }
     update(){
@@ -91,15 +83,15 @@ class Feature {
 }
 
 class timeSet {
-    constructor(TimeDifference = 1/60){
+    constructor(TimeDifference = 1/60){ //timeDifference is the time between the current frame time and the lasttime frame. 
             let buildUptime = 0; 
             let LastTime = 0;
             
             this.updateAttorny = time=>{
-            buildUptime += (time - LastTime)/1000; // Use seconds instead of DSec.
+            buildUptime += (time - LastTime)/1000; // Use seconds instead of MSec.
                 
                 
-                while (buildUptime > TimeDifference){
+                while (buildUptime > TimeDifference){ // while loop to organize the time and the shape dimensions for the jump.
                 this.update(TimeDifference);
                 buildUptime -= TimeDifference;
                                                     }
@@ -115,8 +107,8 @@ class timeSet {
             this.enqueue();
             }
         }
-var KeyDown = 1;
-var KeyUp = 0;
+//var KeyDown = 1;
+//var KeyUp = 0;
 class KeyboardKeys {
     constructor() {
         // Holds the current state of a given key
@@ -126,24 +118,28 @@ class KeyboardKeys {
         this.keyBack = new Map();
     }
 
-    Mapping(code, confirm) {
+    Matching(code, confirm) {
         this.keyBack.set(code, confirm);
     }
 
     controlEvent(event) {
+        // extract the keycode
         const {code} = event;
 
-        if (!this.keyBack.has(code)) {
-            // Did not have key mapped.
-            return;
+        if (this.keyBack.has(code)) {
+            // If there is a match, then avoid any pressed keyboard keys doing what they are supposed to do in the browser.
+            event.preventDefault(); 
         }
 
-        event.preventDefault();
+        else
+        {
+            return false;
+        }
 
         if (event.type == 'keydown') 
-            var keyMode = KeyDown;
+            var keyMode = 1;
         else
-             var keyMode = KeyUp
+             var keyMode = 0;
 
         if (this.keyModes.get(code) === keyMode) {
             return;
@@ -159,8 +155,8 @@ class KeyboardKeys {
         
 
         var StateArr = ['keydown', 'keyup'];
-        StateArr.forEach(eventName => {
-            window.addEventListener(eventName, event => {
+        StateArr.forEach(codeNumber => {
+            window.addEventListener(codeNumber, event => {
                 this.controlEvent(event);
             });
         });
@@ -179,30 +175,32 @@ class Level {
             this.Entity.forEach(item=>{
             item.update(TimeDifference);
             
-            item.position.x += item.velocity.x * TimeDifference; 
-            this.brickCollision.collideX(item);
+            item.position.x += item.velocity.x * TimeDifference; // correlative relation between vel and position in x based on time difference.
+            this.brickCollision.XaxisCollision(item);
             
-            item.position.y += item.velocity.y * TimeDifference;
-            this.brickCollision.collideY(item);
+            item.position.y += item.velocity.y * TimeDifference; // correlative relation between vel and position in y  based on time difference.
+            this.brickCollision.YaxisCollision(item);
             });
 
         }
     }
 class Featurevel extends Feature {
     constructor(){
-        super('velocity');
+        super('velocity'); // call the constructor in the inherited class Feature
     }
-    update(Entity, TimeDifference){
-       
-            }
+    update(item, TimeDifference){
+    item.position.x += item.velocity.x * TimeDifference;
+    item.position.y += item.velocity.y * TimeDifference;
+    }
 
     }
 class Featurejump extends Feature {
     constructor(){
-        super('jump');
-        this.period = 0.7;
+        
+        super('jump'); // call the constructor in the inherited class Feature
+        this.period = 0.3; // how long the space key is pressed in seconds.
         this.timePeriod = 0;
-        this.vel = 200;
+        this.vel = 250; // the velocity of the jump
     }
     begin(){
         this.timePeriod = this.period;
@@ -210,9 +208,9 @@ class Featurejump extends Feature {
     cancel(){
         this.timePeriod = 0;
     }
-    update(Entity, TimeDifference){
+    update(item, TimeDifference){
     if (this.timePeriod > 0){
-        Entity.velocity.y = -this.vel;
+        item.velocity.y = -this.vel;
         this.timePeriod -=TimeDifference;
 
         } 
@@ -223,20 +221,21 @@ class Featurejump extends Feature {
 
 class Featureforward extends Feature {
     constructor(){
-        super('forward');
+        super('forward'); // call the constructor in the inherited class Feature
         this.orientation = 0;
         this.spd = 5000;
     
     }
-    update(Entity, TimeDifference){
-    Entity.velocity.x = this.spd * this.orientation * TimeDifference;
+    update(item, TimeDifference){
+    item.velocity.x = this.spd * this.orientation * TimeDifference;
+
 
         } 
     
     }
 
 
-class Grid {
+class Grid {  // Grid class to accesses the x,y coordinates to determing brick type, i.e. path, background.
     constructor(){
         this.cell = [];
     }
@@ -271,27 +270,42 @@ class Grid {
 }
 
 class Collision {
-    constructor(bricks){
-        this.bricks =new BrickConverter(bricks);
+    constructor(brickCollision){
+        this.bricks =new BrickConverter(brickCollision);
     }
-    collideX(item){
-        var x;
-        if (item.velocity.x > 0) {
-            x = item.position.x + item.size.x;
-        }
-        else if (item.velocity.x < 0){
-            x = item.position.x;
+    YaxisCollision(item){ // Check path collision 
+    var intersections = this.bricks.coordinatesDistance(
+        item.position.x,item.position.x + item.size.x,
+        item.position.y,item.position.y + item.size.y);
         
+        intersections.forEach(function(brickFound){
+        if (brickFound.brick.name!='path'){
+        return;
+    }
+    if (item.velocity.y > 0){ // run the detection to be for hitting the ground path.
+        if(item.position.y + item.size.y > brickFound.y1 ){
+            item.position.y = brickFound.y1 - item.size.y;
+            item.velocity.y = 0;
         }
-        else {
-            return;
+    
+    }
+    else if (item.velocity.y < 0){ // run the detection to be for hitting the ceiling.  
+        if(item.position.y < brickFound.y2 ){
+                item.position.y = brickFound.y2;
+                item.velocity.y = 0;
+             }
         }
+    });
+    }
+
+
+    XaxisCollision(item){
         var intersections = this.bricks.coordinatesDistance(
-            x,x,
+            item.position.x,item.position.x + item.size.x,
             item.position.y,item.position.y + item.size.y);
             
             intersections.forEach(function(brickFound){
-            if (brickFound.brick.name!== 'path'){
+            if (brickFound.brick.name!='path'){
             return;
         }
         if (item.velocity.x > 0){ //If Player passed the path brick, move the player back to the path 
@@ -308,73 +322,41 @@ class Collision {
             }
         });
     }
-    collideY(item){
-        var y;
-        if (item.velocity.y > 0) {
-            y = item.position.y + item.size.y;
-        }
-        else if (item.velocity.y < 0){
-            y = item.position.y;
-        }
-        else {
-            return;
-        }
-    var intersections = this.bricks.coordinatesDistance(
-        item.position.x,item.position.x + item.size.x,
-        y,y);
-        
-        intersections.forEach(function(brickFound){
-        if (brickFound.brick.name!== 'path'){
-        return;
-    }
-    if (item.velocity.y > 0){ //If Player passed the path brick, move the player back to the path 
-        if(item.position.y + item.size.y > brickFound.y1 ){
-            item.position.y = brickFound.y1 - item.size.y;
-            item.velocity.y = 0;
-        }
-    }
-     if (item.velocity.y < 0){ //If Player passed the path brick, move the player back to the path 
-        if(item.position.y < brickFound.y2 ){
-                item.position.y = brickFound.y2;
-                item.velocity.y = 0;
-             }
-        }
-    });
-}
+    
 
 
-
-    test(item){
-    this.collideY(item);
-    this.collideX(item);
-    }
+    /*test(item){
+    this.YaxisCollision(item);
+    this.XaxisCollision(item);
+    }*/
     }
     
 
-class BrickConverter { // convert the world position coordinates into brick coordinates. 
+class BrickConverter { // convert the world positions coordinates into brick coordinates x,y. 
     constructor(grid, brickSize = 16){
         this.grid = grid;
         this.brickSize = brickSize;
         
     }
-    contextPos(position){
-        return Math.floor(position / this.brickSize);
+    Brickcoordintes(position){
+        return Math.floor(position / this.brickSize); // return the  coordinates
     }
     
-    DistanceDifference(positionA,positionB){
+    DistanceDifference(positionA,positionB){ // return a brick based on its coordinates.
         var MaxPos = Math.ceil(positionB / this.brickSize) * this.brickSize;
         var Difference = [];
         var position = positionA;
         
         do {
-            Difference.push(this.contextPos(position));
+            Difference.push(this.Brickcoordintes(position));
             position = position + this.brickSize;
         }
         while(position < MaxPos);
             return Difference;
 
     }
-    coordinatesMet(coordinateX,coordinateY){
+    coordinatesMet(coordinateX,coordinateY){ /*coordinatesMet method ask the 
+                                            matrix for the brick given it is coordinates*/
     var brick = this.grid.get(coordinateX,coordinateY);
     if(brick){
     var y1 = coordinateY * this.brickSize;
@@ -383,16 +365,17 @@ class BrickConverter { // convert the world position coordinates into brick coor
     var x2 = x1 + this.brickSize;
         return{
             brick,
-            y1,
-            y2,
             x1,
             x2,
-        }
+            y1,
+            y2,
+            
+        };
     }
 }  
-coordinatesPos(positionX,positionY){
-    return this.coordinatesMet(this.contextPos(positionX),
-    this.contextPos(positionY));
+coordinatesPos(positionX,positionY){ // return the brick coordinates from the coordinatesMet method.
+    return this.coordinatesMet(this.Brickcoordintes(positionX),
+    this.Brickcoordintes(positionY));
 }
 coordinatesDistance(x1,x2,y1,y2){
     var intersections = [];
@@ -408,17 +391,16 @@ coordinatesDistance(x1,x2,y1,y2){
     }
 }
 
-window.BrickConverter = BrickConverter;
 function uploadImage(url) { // Function to load images from the the img folder.
     return new Promise(function (resolve){ // return Promise
         var img = new Image(); // create image instance 
         img.addEventListener('load', function(){ //attach addEvent listener on the image
-            resolve(img);
+            resolve(img); //resolve the promise with uploaded image.
         });
-        img.src = url;
+        img.src = url; //Activates uploading the image
     });
 }
-function buildBricks(level,Levelbck){
+function buildBricks(level,Levelbck){  // Iterate through the Json file reading the dimensions of the x's anmd
     Levelbck.forEach(function(background){
     background.dimensions.forEach(function([x1, x2, y1, y2]) {
         for (let x = x1; x < x2; ++x) {
@@ -434,9 +416,9 @@ function buildBricks(level,Levelbck){
 
     });
 }
-function drawLevel(name) { // Function to read the Json file in the levels folder.
+function drawLevel(name) { // draw Level function to read Json files 
     return Promise.all(
-    [fetch(`/levels/${name}.json`)
+    [fetch(`/levels/${name}.json`) //fetch allows to make network requests and return Json() object.
     .then(function(drw){ return drw.json()
         }),
     drawBackgroundPixels(),
@@ -455,20 +437,21 @@ function drawLevel(name) { // Function to read the Json file in the levels folde
 function drawBackgroundPixels (){
     return uploadImage('/img/tile.png') // Add the image from the img file as URL
     .then(function(img){
-        var pixels = new Pixel(img);
-        pixels.locateBrick('path', 0, 15); // matching pixels to the uploaded img to find the path.
+        var pixels = new DrawingPixel(img,16,16);
+        pixels.locateBrick('path', 0, 18); // matching pixels to the uploaded img to find the path.
         pixels.locateBrick('bgr', 20, 2); // matching pixels to the uploaded img to find the background.
+        //pixels.locateBrick('box', 15, 3); // matching pixels to the uploaded img to find the background.
         return pixels;
     });
 }
 function drawPlayerPixels (){
-    return uploadImage('/img/character.png') // Add the image from the img file as URL
+    return uploadImage('/img/Shooter.png') // Add the image from the img file as URL
     .then(function(img){
-        var pixels = new Pixel(img);
-        pixels.locate('idle',59,11,25,58); // matching pixels to the uploaded img to find the path.
+        var pixels = new DrawingPixel(img);
+        pixels.locate('idle',21,10,32,41); // matching pixels to the uploaded img to find the path.
         return pixels;
     });
-
+//askdjflkdsajflksadjflk
 }
 
 function createbgLayer (level,pixels){   // create the background layer first
@@ -486,34 +469,35 @@ function createbgLayer (level,pixels){   // create the background layer first
         ctx.drawImage(supplier,0,0);
     };
 }
-function createPixelLayer(Entity){
+function createPixelLayer(item){
 return function drawPlayerLayer(ctx){
-    Entity.forEach(function(item){
+    item.forEach(function(item){
     item.draw(ctx);
 });
 };
 }
 
-function createCollisionLayer(level){
+function CollisionDetectionLayer(level){
     var convertedBricks = []; 
-    var BrickConverter = level.brickCollision.bricks;
-    var brickSize = BrickConverter.brickSize;
-    var coordinatesMetinitial = BrickConverter.coordinatesMet;
-    BrickConverter.coordinatesMet = function VertualcoordinatesMet(x,y){
+    var brickConverter = level.brickCollision.bricks;
+    var brickSize = brickConverter.brickSize;
+    var coordinatesMetinitial = brickConverter.coordinatesMet;
+    brickConverter.coordinatesMet = function VertualcoordinatesMet(x,y){
     convertedBricks.push({x,y});
-    //console.log(x,y);
-    return coordinatesMetinitial.call(BrickConverter,x,y)
+    return coordinatesMetinitial.call(brickConverter,x,y)
     }   
-    
-    return function drawCollision(ctx){
-        ctx.strokeStyle = 'black';
+
+    return function detectCollision(ctx){
+        //ctx.strokeStyle = 'black';
         convertedBricks.forEach(function({x, y}){
             //console.log('Working');
          ctx.beginPath();
-         ctx.rect(x * brickSize,y * brickSize, brickSize, brickSize);
+         ctx.rect(x * brickSize,
+            y * brickSize,
+             brickSize, brickSize);
          ctx.stroke();
         });
-        ctx.strokeStyle = 'red';
+        //ctx.strokeStyle = 'blue';
         level.Entity.forEach(function(item){
         ctx.beginPath();
         ctx.rect(item.position.x,item.position.y, item.size.x, item.size.y);
@@ -521,33 +505,27 @@ function createCollisionLayer(level){
         });
         convertedBricks.length = 0;
         }
-
-
     }
-
-
-
- 
-
 
 var canvas = document.getElementById('view');// Access the main canvas for painting.
 var ctx = canvas.getContext('2d');// Access the context in order to use the API.
+
 Promise.all([drawPlayerPixels(),drawLevel('level1'),]) // Parallalizing the drawing time for the level pixels and the background
 .then(function([playerPixel,level]){
     var gravity = 1500;
     var Player = new Entity();
-    Player.position.set(64,32);
+    Player.position.set(32,32);
     level.Entity.add(Player);
-    createCollisionLayer(level);
-    Player.size.set(16,56);
+    CollisionDetectionLayer(level);
+    Player.size.set(18,40);
     Player.addFeature(new Featurejump());
     Player.addFeature(new Featureforward());
-    
+    //level.orl.layers.push(CollisionDetectionLayer(level));
 
 
     
     var kPressed = new KeyboardKeys();
-    kPressed.Mapping("Space",keyMode => {
+    kPressed.Matching("ArrowUp",function(keyMode){
         if (keyMode) {
             Player.jump.begin();
         }
@@ -555,10 +533,10 @@ Promise.all([drawPlayerPixels(),drawLevel('level1'),]) // Parallalizing the draw
             Player.jump.cancel();
         }
     });
-    kPressed.Mapping("ArrowRight",keyMode => {
+    kPressed.Matching("ArrowRight",function(keyMode){
         Player.forward.orientation = keyMode;
     });
-    kPressed.Mapping("ArrowLeft",keyMode => {
+    kPressed.Matching("ArrowLeft",function(keyMode){
         Player.forward.orientation = -keyMode;
     });
             
@@ -573,7 +551,7 @@ Promise.all([drawPlayerPixels(),drawLevel('level1'),]) // Parallalizing the draw
 
 
     var tSet = new timeSet(1/60);
-tSet.update = function update(TimeDifference){
+    tSet.update = function update(TimeDifference){
     level.update(TimeDifference);
     level.orl.build(ctx);
     Player.velocity.y += gravity * TimeDifference;
