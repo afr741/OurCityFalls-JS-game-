@@ -41,6 +41,18 @@
         $('#profile').show();
         $('#menu').addClass('profile');
     });
+    
+    $('.stats').click(function() {
+        $('#profile').hide();
+        $('#stats').show();
+        $('#menu').addClass('stats');
+    });
+    
+    $('.achievements').click(function() {
+        $('#profile').hide();
+        $('#achievements').show();
+        $('#menu').addClass('achievements');
+    });
 
     $('.options').click(function() {
         $('#main').hide();
@@ -73,6 +85,18 @@
         $('#profile').hide();
         $('#main').show();
         $('#menu').removeClass('#profile');
+    });
+    
+    $('.back').click(function() {
+        $('#stats').hide();
+        $('#main').show();
+        $('#menu').removeClass('#stats');
+    });
+    
+    $('.back').click(function() {
+        $('#achievements').hide();
+        $('#main').show();
+        $('#menu').removeClass('#achievements');
     });
 
     // $('.sound').click(function() {
