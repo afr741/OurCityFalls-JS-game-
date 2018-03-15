@@ -71,7 +71,7 @@ class Entity {
 }
 }
 class Feature {
-    constructor(name) { //name may be featureJump, FeatureVel or FeatureForward.
+    constructor(name) { //name may be featureJump, featureVel or FeatureForward.
         this.NAME = name;
     }
     update(){
@@ -103,7 +103,7 @@ class timeSet {
         enqueue(){  
             requestAnimationFrame(this.updateAttorny);
                 }
-        start(){
+        begin(){
             this.enqueue();
             }
         }
@@ -184,7 +184,7 @@ class Level {
 
         }
     }
-class Featurevel extends Feature {
+class featureVel extends Feature {
     constructor(){
         super('velocity'); // call the constructor in the inherited class Feature
     }
@@ -194,7 +194,7 @@ class Featurevel extends Feature {
     }
 
     }
-class Featurejump extends Feature {
+class featureJump extends Feature {
     constructor(){
         
         super('jump'); // call the constructor in the inherited class Feature
@@ -260,8 +260,8 @@ class Grid {  // Grid class to accesses the x,y coordinates to determing brick t
             }
         }
         forEach(confirm){
-            this.cell.forEach(function(Column, x){
-                Column.forEach(function(intersectV,y){
+            this.cell.forEach(function(column, x){
+                column.forEach(function(intersectV,y){
                 confirm(intersectV,x,y);
             });
         });
@@ -342,7 +342,7 @@ class BrickConverter { // convert the world positions coordinates into brick coo
         return Math.floor(position / this.brickSize); // return the  coordinates
     }
     
-    DistanceDifference(positionA,positionB){ // return a brick based on its coordinates.
+    DistanceMatched(positionA,positionB){ // return a brick based on its coordinates.
         var MaxPos = Math.ceil(positionB / this.brickSize) * this.brickSize;
         var Difference = [];
         var position = positionA;
@@ -379,8 +379,8 @@ coordinatesPos(positionX,positionY){ // return the brick coordinates from the co
 }
 coordinatesDistance(x1,x2,y1,y2){
     var intersections = [];
-    this.DistanceDifference(x1,x2).forEach(coordinateX =>{
-        this.DistanceDifference(y1,y2).forEach(coordinateY =>{
+    this.DistanceMatched(x1,x2).forEach(coordinateX =>{
+        this.DistanceMatched(y1,y2).forEach(coordinateY =>{
             var brickFound = this.coordinatesMet(coordinateX, coordinateY);
                 if (brickFound) {
                     intersections.push(brickFound);
@@ -451,7 +451,7 @@ function drawPlayerPixels (){
         pixels.locate('idle',21,10,32,41); // matching pixels to the uploaded img to find the path.
         return pixels;
     });
-//askdjflkdsajflksadjflk
+
 }
 
 function createbgLayer (level,pixels){   // create the background layer first
@@ -465,7 +465,7 @@ function createbgLayer (level,pixels){   // create the background layer first
         });
     
 
-    return function drawBackgroundLayer(ctx) {
+    return function drawBgLayer(ctx) {
         ctx.drawImage(supplier,0,0);
     };
 }
@@ -488,7 +488,6 @@ function CollisionDetectionLayer(level){
     }   
 
     return function detectCollision(ctx){
-        //ctx.strokeStyle = 'black';
         convertedBricks.forEach(function({x, y}){
             //console.log('Working');
          ctx.beginPath();
@@ -497,7 +496,6 @@ function CollisionDetectionLayer(level){
              brickSize, brickSize);
          ctx.stroke();
         });
-        //ctx.strokeStyle = 'blue';
         level.Entity.forEach(function(item){
         ctx.beginPath();
         ctx.rect(item.position.x,item.position.y, item.size.x, item.size.y);
@@ -518,7 +516,7 @@ Promise.all([drawPlayerPixels(),drawLevel('level1'),]) // Parallalizing the draw
     level.Entity.add(Player);
     CollisionDetectionLayer(level);
     Player.size.set(18,40);
-    Player.addFeature(new Featurejump());
+    Player.addFeature(new featureJump());
     Player.addFeature(new Featureforward());
     //level.orl.layers.push(CollisionDetectionLayer(level));
 
