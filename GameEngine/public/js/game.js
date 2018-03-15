@@ -555,7 +555,7 @@ Promise.all([drawPlayerPixels(),drawLevel('level1'),]) // Parallalizing the draw
     Player.velocity.y += gravity * TimeDifference;
     timeSet.buildUptime -= TimeDifference;    
 }
-tSet.start();
+tSet.begin();
 });
 
 
