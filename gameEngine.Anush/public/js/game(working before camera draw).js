@@ -19,29 +19,17 @@ class DrawingPixel {
     }
 
     locate(name, x, y,width, height) { // creating a locate method where we can extract a subset of an img by allocating the position of the subset.
-       
-        var suppliers = [false, true].map(flip => {
-
         var supplier = document.createElement('canvas'); // save the subset image to a supplier in order to simplify the process of adding subset images efficiently. 
         supplier.height = height; // Assigning subset img measurement to the supplier.
         supplier.width = width; //------
-       
-        var ctx =  supplier.getContext('2d');
-       
-       if(flip) {
-        ctx.scale(-1,1);
-        ctx.translate(-width, 0); 
-       }
-        ctx.drawImage(this.img,x,y, //subset img properties
+        supplier
+        .getContext('2d').drawImage(this.img,x,y, //subset img properties
         width,height,0,0,width,height); //Size of the subset.
-       
-       return supplier;
-    });
-        this.bricks.set(name, suppliers); // add the subset image to the map.
+        this.bricks.set(name, supplier); // add the subset image to the map.
     }
    
-    build(name, ctx, x, y, flip = false,) { // Sketch the subset.
-        var supplier = this.bricks.get(name)[flip ? 1: 0];
+    build(name, ctx, x, y) { // Sketch the subset.
+        var supplier = this.bricks.get(name); 
         ctx.drawImage(supplier, x, y);
     }
     locateBrick(name,x,y){  // sketch the subsete with width and height for the Background tiles.
@@ -234,23 +222,15 @@ class featureJump extends Feature {
 class Featureforward extends Feature {
     constructor(){
         super('forward'); // call the constructor in the inherited class Feature
-      
         this.orientation = 0;
         this.spd = 5000;
-
-        this.distance = 0;
-        this.heading = 1;
+    
     }
     update(item, TimeDifference){
     item.velocity.x = this.spd * this.orientation * TimeDifference;
 
-    if (this.orientation) {
-        this.heading = this.orientation;
-        this.distance += Math.abs(item.velocity.x) * TimeDifference; 
-       } else {
-            this.distance = 0;
+
         } 
-    }
     
     }
 
@@ -475,24 +455,13 @@ return loadJSON(`/pixels/${name}.json`)
                             img, 
                             sheetSpec.tileW, 
                             sheetSpec.tileH);
-
-        if(sheetSpec.bricks) {
         sheetSpec.bricks.forEach(brickSpec => {
             pixels.locateBrick(
                 brickSpec.name,
                 brickSpec.index[0],
                 brickSpec.index[1]);
         });
-       }
-
-       if(sheetSpec.frames) {
-
-        sheetSpec.frames.forEach(frameSpec => {
-
-            pixels.locate(frameSpec.name,...frameSpec.rect);
-        });
-       }
-
+       
         return pixels;
       });
 }
@@ -517,49 +486,41 @@ function drawLevel(name) { // draw Level function to read Json files
         return level;
     });
 }
+/*
+function drawBackgroundPixels (){
+    return drawImage('/img/tile.png') // Add the image from the img file as URL
+    .then(function(img){
+        var pixels = new DrawingPixel(img,16,16);
+        pixels.locateBrick('path', 0, 18); // matching pixels to the uploaded img to find the path.
+        pixels.locateBrick('bgr', 20, 2); // matching pixels to the uploaded img to find the background.
+        //pixels.locateBrick('box', 15, 3); // matching pixels to the uploaded img to find the background.
+        return pixels;
+    });
+}
 
-
-/**    NO MORE NEEEDED SINCE WE USED PLAYER JSON TO LOAD PLAYER
+*/
 function drawPlayerPixels (){
     return drawImage('/img/Shooter.png') // Add the image from the img file as URL
-
     .then(function(img){
-          
         var pixels = new DrawingPixel(img);
         pixels.locate('idle',21,10,32,41); // matching pixels to the uploaded img to find the path.
         return pixels;
     });
 
-}   **/
+}
 
-function createbgLayer (level, pixels){   // create the background layer first
-    var bricks = level.bricks;
-    var resolver = level.brickCollision.bricks;
-
+function createbgLayer (level,pixels){   // create the background layer first
+    
     var supplier = document.createElement('canvas');
     var ctx = supplier.getContext('2d');
     supplier.width = 2048;
     supplier.height = 350;
-
-function redraw(startIndex, endIndex) {
-    for (let x = startIndex; x <= endIndex; ++x) {
-        const col = bricks.cell[x];
-        if (col){
-            col.forEach((brick,y) => {
-                pixels.buildBrick(brick.name, ctx, x, y);
-            });
-        }
-    }
-}
-
+    level.bricks.forEach(function(brick,x,y){
+    pixels.buildBrick(brick.name, ctx, x, y);
+        });
+    
 
     return function drawBgLayer(ctx, camera) {
-
-        var drawWidth = resolver.Brickcoordintes(camera.size.x);
-        var drawFrom = resolver.Brickcoordintes(camera.position.x);
-        var drawTo = drawFrom + drawWidth;
-        redraw(drawFrom, drawTo);
-
         ctx.drawImage(supplier,-camera.position.x, -camera.position.y);
     };
 }
@@ -612,31 +573,19 @@ function CollisionDetectionLayer(level){
         convertedBricks.length = 0;
         }
     }
-function createCameraLayer(cameraToDraw) {
-    return function drawCameraRect(ctx, fromCamera){
-ctx.strokeStyle = 'purple';
- ctx.beginPath();
-        ctx.rect(cameraToDraw.position.x -  fromCamera.position.x,
-            cameraToDraw.position.y - fromCamera.position.y,
-             cameraToDraw.size.x, 
-             cameraToDraw.size.y);
-        ctx.stroke();
-    }
-}
 
+  
      class Camera {
         constructor() {
             this.position = new Vector (0,0);
-            this.size = new Vector(276, 270);
         }
     }
 
 var canvas = document.getElementById('view');// Access the main canvas for painting.
 var ctx = canvas.getContext('2d');// Access the context in order to use the API.
 
-Promise.all([loadPixelSheet('player'),drawLevel('level1'),]) // Parallalizing the drawing time for the level pixels and the background
+Promise.all([drawPlayerPixels(),drawLevel('level1'),]) // Parallalizing the drawing time for the level pixels and the background
 .then(function([playerPixel,level]){
-    console.log('DrawingPixel');
     const camera = new Camera();
     window.camera = camera;
 
@@ -647,14 +596,7 @@ Promise.all([loadPixelSheet('player'),drawLevel('level1'),]) // Parallalizing th
     var Player = new Entity();
     Player.position.set(32,32);
     level.Entity.add(Player);
-
-/*level.orl.layers.push(
-    CollisionDetectionLayer(level),
-    createCameraLayer(camera));  */
-
-
-
-
+    CollisionDetectionLayer(level);
     Player.size.set(18,40);
     Player.addFeature(new featureJump());
     Player.addFeature(new Featureforward());
@@ -681,30 +623,9 @@ Promise.all([loadPixelSheet('player'),drawLevel('level1'),]) // Parallalizing th
 
     kPressed.respondTo(window);
     
-
-function drawAnim(frames, frameLen) {
-
-    return function convertedFrame(distance) { 
-
-        const frameIndex = Math.floor(distance / frameLen) % frames.length;
-        const frameName =  frames[frameIndex];
-          return frameName;  
-    };
-}
-
-
-
-    var runAnim = drawAnim(['run-1', 'run-2', 'run-3'], 10);
-    function routeFrame(player) {
-        if (player.forward.orientation !=0) {
-
-            return runAnim(player.forward.distance);
-        }
-        return 'idle';
-    }
     
     Player.draw = function drawPlayer(ctx) {
-    playerPixel.build(routeFrame(this),ctx, 0, 0, this.forward.heading <0);
+    playerPixel.build('idle',ctx, 0, 0);
     }
 
 

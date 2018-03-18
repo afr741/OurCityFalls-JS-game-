@@ -7,15 +7,28 @@
 	"bricks": [
 {
 	"name": "path",
-	"index": [5, 7]
+	"index": [14, 3]
 },
  
 {
 	"name": "bgr",
-	"index": [13, 6]
+	"index": [4, 20]
+}, 
 
-} 
+{
+	"name": "chocolate",
+	"index": [5, 20]
+},
+
+{
+	"name": "bricks2",
+	"index": [1, 0]
+},
+
+{
+	"name": "chance",
+	"index": [24, 0]
+}
 
 	]
-
 }
