@@ -236,7 +236,7 @@ class Featureforward extends Feature {
         super('forward'); // call the constructor in the inherited class Feature
       
         this.orientation = 0;
-        this.spd = 5000;
+        this.spd = 30000;
 
         this.distance = 0;
         this.heading = 1;
@@ -628,7 +628,7 @@ ctx.strokeStyle = 'purple';
      class Camera {
         constructor() {
             this.position = new Vector (0,0);
-            this.size = new Vector(276, 270);
+            this.size = new Vector(800, 270);
         }
     }
 
@@ -673,10 +673,10 @@ Promise.all([loadPixelSheet('player'),drawLevel('level1'),]) // Parallalizing th
         }
     });
     kPressed.Matching("ArrowRight",function(keyMode){
-        Player.forward.orientation = keyMode;
+        Player.forward.orientation+= keyMode ? 1 : -1;
     });
     kPressed.Matching("ArrowLeft",function(keyMode){
-        Player.forward.orientation = -keyMode;
+        Player.forward.orientation += -keyMode ? -1 :1;
     });
             
 
@@ -713,6 +713,11 @@ function drawAnim(frames, frameLen) {
     var tSet = new timeSet(1/60);
     tSet.update = function update(TimeDifference){
     level.update(TimeDifference);
+ 	if (Player.position.x > 100) {
+
+ 		camera.position.x = Player.position.x - 100;
+ 	}
+
     level.orl.build(ctx, camera);
     Player.velocity.y += gravity * TimeDifference;
     timeSet.buildUptime -= TimeDifference;    
