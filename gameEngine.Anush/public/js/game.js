@@ -486,12 +486,13 @@ return loadJSON(`/pixels/${name}.json`)
        }
 
        if(sheetSpec.frames) {
-
         sheetSpec.frames.forEach(frameSpec => {
-
             pixels.locate(frameSpec.name,...frameSpec.rect);
         });
        }
+
+
+
 
         return pixels;
       });
@@ -636,7 +637,7 @@ var ctx = canvas.getContext('2d');// Access the context in order to use the API.
 
 Promise.all([loadPixelSheet('player'),drawLevel('level1'),]) // Parallalizing the drawing time for the level pixels and the background
 .then(function([playerPixel,level]){
-    console.log('DrawingPixel');
+ 
     const camera = new Camera();
     window.camera = camera;
 
