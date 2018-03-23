@@ -1,6 +1,14 @@
 body {
-  font-family: arial, sans-serif;
-  font-size: 30px;
+  font-family: fantasy, sans-serif;
+  font-size: 35px;
+  background-image: url('https://img00.deviantart.net/5524/i/2013/080/f/8/free_stock____horror_cinematic_grunge_background_by_rex_angelos-d5yr4od.jpg');
+  /* Full height */
+  height: 100%; 
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   background-color: black;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -10,11 +18,12 @@ body {
   overflow: hidden;
 }
 
+
 h1{
     color:aliceblue;
     font-family: fantasy;
     font-size: 55px;
-    text-shadow: 5px 5px darkred;
+    text-shadow: 5px 5px rgb(0, 0, 0);
     margin: 0px 0px 100px 0px;
 }
 
@@ -27,12 +36,12 @@ div{
     /*background-color: blue;*/
     position: relative;
     text-align: center;
-    color: white;
+    color: aliceblue;
 }
 
 label{
     font-family: fantasy;
-    font-size: 20px;
+    font-size: 35px;
     color: aliceblue;
 }
 
@@ -50,6 +59,16 @@ a {
   text-decoration: none;
   color: inherit;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  padding: 10px;
 }
 
 
@@ -73,7 +92,7 @@ a {
     top: 0; left: 0; bottom: 0; right: 0;
 }
 
-/* 
+/*
 #main h1 {
     color:aliceblue;
     font-family: fantasy;
@@ -97,6 +116,30 @@ a {
   }
 
   #options {
+    display: none;
+    height: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+  }
+
+  #controls {
+    display: none;
+    height: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+  }
+
+  #audio {
+    display: none;
+    height: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+  }
+
+  #difficulty {
     display: none;
     height: 100%;
     margin: auto;
@@ -150,9 +193,16 @@ a {
 .offline{
     text-align: right;
 }
-/*input[type=button]{
-    background-color: palegreen;
-}*/
+
+input[type=text]{
+    background-color: black;
+    text-align: center;
+    border: none;
+    font-size: 30px;
+    font-family: fantasy, Arial, Helvetica, sans-serif;
+    display: block;
+    margin: 0 auto;
+}
 
 .button {
     display: block;
@@ -160,18 +210,14 @@ a {
     margin: 0 auto;
     height: 35px;
     line-height: 30px;
-    border: 1px solid rgb(46, 33, 39);
+    border: none;
     color: white;
     font-weight: bold;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    background-color: rgb(19, 11, 15);
-    background-image: -webkit-linear-gradient(bottom, rgb(36, 25, 30) 0%, rgb(36, 25, 30) 100%);
-    background-image:         linear-gradient(to bottom, rgb(36, 25, 30) 0%, rgb(36, 25, 30) 100%);
-    border-radius: 5px;
+    background-repeat: no-repeat;
+    border-radius: 50px;
   }
   
   .button:hover {
-    background-color: rgb(27, 13, 20);
-    background-image: -webkit-linear-gradient(bottom, rgb(34, 9, 21) 0%, rgb(34, 9, 21) 100%);
-    background-image:         linear-gradient(to bottom, rgb(129, 126, 126) 0%, rgb(129, 126, 126) 100%);
+    
   }
