@@ -3,8 +3,6 @@
 const Sides = {
     TOP: Symbol('top'),
     BOTTOM: Symbol('bottom'),
-    LEFT:Symbol('left'),
-    RIGHT:('right')
 };
 class OrderedLayers {   // Draw all the layers in order.    
     constructor(){
@@ -371,7 +369,6 @@ class Collision {
         if(item.position.y < brickFound.y2 ){
                 item.position.y = brickFound.y2;
                 item.velocity.y = 0;
-                 item.obstruct(Sides.TOP); //Anush: added this since it was missing
              }
         }
     });
@@ -391,14 +388,12 @@ class Collision {
             if(item.position.x +item.size.x > brickFound.x1 ){
                 item.position.x = brickFound.x1 - item.size.x;
                 item.velocity.x = 0;
-                item.obstruct(Sides.RIGHT);
             }
         }
         else if (item.velocity.x < 0){ //If player passed the path brick, move the player back to the path 
             if(item.position.x < brickFound.x2 ){
                     item.position.x = brickFound.x2;
                     item.velocity.x = 0;
-                    item.obstruct(Sides.LEFT);
                  }
             }
         });
@@ -650,11 +645,7 @@ function loadZombie() { //Anush: loads Zombie sprite
 return loadPixelSheet('zombie')
     .then(createZombieFactory);
 }
-function createZombieFactory(playerPixel) {
-
-    console.log(playerPixel);
-   // const walkAnim = playerPixel.animations.get('walk');
-
+function createZombieFactory(playerPixel) { 
    function drawZombie(ctx) {
     playerPixel.build('walk-1', ctx, 0, 0);
    } 
@@ -668,10 +659,8 @@ function createZombieFactory(playerPixel) {
 
             NAME: 'walk',
             speed: -30,
-            obstruct(zombie, side) {
-            	if (side === Sides.LEFT || side===Sides.RIGHT) {
-            		this.speed = -this.speed;
-            	}
+            obstruct() {
+
 
             },
             update(zombie) {
@@ -806,7 +795,7 @@ drawLevel('level1'),
     const camera = new Camera();
     window.camera = camera;
     
-    const player = createPlayer(); //Anush: createPlayer()
+    const player = createPlayer();
     player.position.set(32,32);
     level.Entity.add(player);
 
@@ -855,6 +844,7 @@ drawLevel('level1'),
 
     level.orl.build(ctx, camera);
     player.velocity.y += gravity * TimeDifference;
+     //zombie.velocity.y += gravity * TimeDifference;
     timeSet.buildUptime -= TimeDifference;    
 
 }

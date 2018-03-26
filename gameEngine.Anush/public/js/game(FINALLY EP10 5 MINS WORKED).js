@@ -3,8 +3,6 @@
 const Sides = {
     TOP: Symbol('top'),
     BOTTOM: Symbol('bottom'),
-    LEFT:Symbol('left'),
-    RIGHT:('right')
 };
 class OrderedLayers {   // Draw all the layers in order.    
     constructor(){
@@ -371,7 +369,6 @@ class Collision {
         if(item.position.y < brickFound.y2 ){
                 item.position.y = brickFound.y2;
                 item.velocity.y = 0;
-                 item.obstruct(Sides.TOP); //Anush: added this since it was missing
              }
         }
     });
@@ -387,18 +384,16 @@ class Collision {
             if (brickFound.brick.type!='path'){
             return;
         }
-        if (item.velocity.x > 0){ //If player passed the path brick, move the player back to the path 
+        if (item.velocity.x > 0){ //If Player passed the path brick, move the player back to the path 
             if(item.position.x +item.size.x > brickFound.x1 ){
                 item.position.x = brickFound.x1 - item.size.x;
                 item.velocity.x = 0;
-                item.obstruct(Sides.RIGHT);
             }
         }
-        else if (item.velocity.x < 0){ //If player passed the path brick, move the player back to the path 
+        else if (item.velocity.x < 0){ //If Player passed the path brick, move the player back to the path 
             if(item.position.x < brickFound.x2 ){
                     item.position.x = brickFound.x2;
                     item.velocity.x = 0;
-                    item.obstruct(Sides.LEFT);
                  }
             }
         });
@@ -581,22 +576,26 @@ function drawLevel(name) { // draw Level function to read Json files
 }
 
 
-   
-
-
-    const FAST_DRAG = 1/5000;
+   const FAST_DRAG = 1/5000;
     const SLOW_DRAG = 1/1000;
     
-function loadPlayer (){  //loadMario()
+function drawPlayerPixels (){
     return loadPixelSheet('player')
-    .then(createPlayerFactory);
-}
+    .then(playerPixel => {
+        return function createPlayer() {
+    const Player = new Entity();
+    Player.size.set(18,40);
+   
+    Player.addFeature(new Featureforward());
+    Player.forward.dragFactor = SLOW_DRAG;
+    Player.addFeature(new featureJump());
 
 
-function createPlayerFactory(playerPixel) {
+    Player.turbo = function setTurboState(turboOn){
+        this.forward.dragFactor = turboOn? FAST_DRAG : SLOW_DRAG;
+    }
 
-
-    function drawAnim(frames, frameLen) {
+function drawAnim(frames, frameLen) {
 
     return function convertedFrame(distance) { 
 
@@ -605,6 +604,8 @@ function createPlayerFactory(playerPixel) {
           return frameName;  
     };
 }
+
+
 
     var runAnim = drawAnim(['run-1', 'run-2', 'run-3'], 6);
     function routeFrame(player) {
@@ -619,74 +620,19 @@ function createPlayerFactory(playerPixel) {
         }
         return 'idle';
     }
-    function setTurboState(turboOn){
-        this.forward.dragFactor = turboOn? FAST_DRAG : SLOW_DRAG;
-    } 
-    function drawPlayer(ctx) {
+
+
+    Player.draw = function drawPlayer(ctx) {
     playerPixel.build(routeFrame(this),ctx, 0, 0, this.forward.heading <0);
     }
-
- return function createPlayer() { //createMario()
-    const player = new Entity();
-    player.size.set(18,40);
    
-    player.addFeature(new Featureforward());
-    // player.forward.dragFactor = SLOW_DRAG; ANUSH: substituted by player.turbo(false);
-    player.addFeature(new featureJump());
-
-
-    player.turbo = setTurboState;
-
-
-
-    player.build = drawPlayer;
-    player.turbo(false);
-return player;
-    }
-}
- 
-
-function loadZombie() { //Anush: loads Zombie sprite
-return loadPixelSheet('zombie')
-    .then(createZombieFactory);
-}
-function createZombieFactory(playerPixel) {
-
-    console.log(playerPixel);
-   // const walkAnim = playerPixel.animations.get('walk');
-
-   function drawZombie(ctx) {
-    playerPixel.build('walk-1', ctx, 0, 0);
-   } 
-
-   return function createZombie() {
-        const zombie = new Entity();
-        zombie.size.set(16, 16);
-      
-
-        zombie.addFeature({
-
-            NAME: 'walk',
-            speed: -30,
-            obstruct(zombie, side) {
-            	if (side === Sides.LEFT || side===Sides.RIGHT) {
-            		this.speed = -this.speed;
-            	}
-
-            },
-            update(zombie) {
-                zombie.velocity.x = this.speed;
-            }
-        })
-        zombie.build = drawZombie;
-
-        return zombie;
-
-   };
+return Player;
+ }
+});
 }
 
 
-
+    
 
 
 
@@ -729,10 +675,10 @@ function createPixelLayer(item, width = 64, height = 64){
 
 
 
-return function drawplayerLayer(ctx, camera){
+return function drawPlayerLayer(ctx, camera){
     item.forEach(function(item){
         pixelsSupplierCtx.clearRect(0,0,width,height);
-    item.build(pixelsSupplierCtx);
+    item.draw(pixelsSupplierCtx);
     ctx.drawImage(pixelsSupplier, 
                     item.position.x - camera.position.x,
                     item.position.y - camera.position.y);
@@ -792,52 +738,45 @@ ctx.strokeStyle = 'purple';
 var canvas = document.getElementById('view');// Access the main canvas for painting.
 var ctx = canvas.getContext('2d');// Access the context in order to use the API.
 
-
-Promise.all([ //Anush: main function to load all entities
-loadPlayer(),
-loadZombie(),
+Promise.all([
+drawPlayerPixels(),
 drawLevel('level1'),
 
 ]) // Parallalizing the drawing time for the level pixels and the background
 
 
-.then(function([createPlayer,createZombie, level]){
+.then(function([createPlayer,level]){
  
     const camera = new Camera();
     window.camera = camera;
-    
-    const player = createPlayer(); //Anush: createPlayer()
-    player.position.set(32,32);
-    level.Entity.add(player);
-
-
-    const zombie = createZombie(); // Anush: loading createZombie in the main function 
-    zombie.position.x = 290;
-    level.Entity.add(zombie);
+    const Player = createPlayer();
+    Player.position.set(32,32);
+  
+    level.Entity.add(Player);
 
 
 
     var gravity = 1500;   
 
 
-    var kPressed = new KeyboardKeys();
+ var kPressed = new KeyboardKeys();
     kPressed.Matching("Space",function(keyMode){
         if (keyMode) {
-            player.jump.begin();
+            Player.jump.begin();
         }
         else { 
-            player.jump.cancel();
+            Player.jump.cancel();
         }
     });
     kPressed.Matching("ArrowUp", function(keyMode){
-        player.turbo(keyMode);
+        Player.turbo(keyMode);
     });
 
     kPressed.Matching("ArrowRight",function(keyMode){
-        player.forward.orientation+= keyMode ? 1 : -1;
+        Player.forward.orientation+= keyMode ? 1 : -1;
     });
     kPressed.Matching("ArrowLeft",function(keyMode){
-        player.forward.orientation += -keyMode ? -1 :1;
+        Player.forward.orientation += -keyMode ? -1 :1;
     });
             
     kPressed.respondTo(window);
@@ -845,18 +784,20 @@ drawLevel('level1'),
 
 
 
+
+
+
     var tSet = new timeSet(1/60);
     tSet.update = function update(TimeDifference){
     level.update(TimeDifference);
- 	if (player.position.x > 100) {
+ 	if (Player.position.x > 100) {
 
- 		camera.position.x = player.position.x - 100;
+ 		camera.position.x = Player.position.x - 100;
  	}
 
     level.orl.build(ctx, camera);
-    player.velocity.y += gravity * TimeDifference;
+    Player.velocity.y += gravity * TimeDifference;
     timeSet.buildUptime -= TimeDifference;    
-
 }
 tSet.begin();
 });

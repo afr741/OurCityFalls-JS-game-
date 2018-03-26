@@ -650,11 +650,7 @@ function loadZombie() { //Anush: loads Zombie sprite
 return loadPixelSheet('zombie')
     .then(createZombieFactory);
 }
-function createZombieFactory(playerPixel) {
-
-    console.log(playerPixel);
-   // const walkAnim = playerPixel.animations.get('walk');
-
+function createZombieFactory(playerPixel) { 
    function drawZombie(ctx) {
     playerPixel.build('walk-1', ctx, 0, 0);
    } 
@@ -806,7 +802,7 @@ drawLevel('level1'),
     const camera = new Camera();
     window.camera = camera;
     
-    const player = createPlayer(); //Anush: createPlayer()
+    const player = createPlayer();
     player.position.set(32,32);
     level.Entity.add(player);
 
@@ -855,6 +851,7 @@ drawLevel('level1'),
 
     level.orl.build(ctx, camera);
     player.velocity.y += gravity * TimeDifference;
+   // zombie.velocity.y += gravity * TimeDifference;
     timeSet.buildUptime -= TimeDifference;    
 
 }
