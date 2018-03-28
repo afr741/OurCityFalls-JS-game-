@@ -76,6 +76,7 @@ class Entity {
     this.position = new Vector(0,0);
     this.velocity = new Vector(0,0);
     this.size = new Vector(0,0);
+    this.lifetime = 0;
     this.features = [] //creating features to ease the composition process
     }
     addFeature(feature){
@@ -94,6 +95,8 @@ class Entity {
         feature.update(this, TimeDifference);
         
     }); 
+
+        this.lifetime +=TimeDifference;
 }
 }
 class Feature {
@@ -270,6 +273,31 @@ class featureJump extends Feature {
     }
 
 }
+
+
+
+class featurePendulumWalk extends Feature {
+    constructor(){
+        
+        super('pendulumWalk'); // call the constructor in the inherited class Feature
+        this.speed = -30;
+    }
+
+    obstruct(Entity,side) {
+        
+                if (side === Sides.LEFT || side===Sides.RIGHT) {
+                    this.speed = -this.speed;
+                }
+
+            } 
+
+            update(Entity, TimeDifference ) {
+            
+                Entity.velocity.x = this.speed;
+            }
+        }
+
+
 
 class Featureforward extends Feature {
     constructor(){
@@ -593,7 +621,7 @@ function loadPlayer (){  //loadMario()
 }
 
 
-function createPlayerFactory(playerPixel) {
+function createPlayerFactory(pixel) {
 
 
     function drawAnim(frames, frameLen) {
@@ -623,7 +651,7 @@ function createPlayerFactory(playerPixel) {
         this.forward.dragFactor = turboOn? FAST_DRAG : SLOW_DRAG;
     } 
     function drawPlayer(ctx) {
-    playerPixel.build(routeFrame(this),ctx, 0, 0, this.forward.heading <0);
+    pixel.build(routeFrame(this),ctx, 0, 0, this.forward.heading <0);
     }
 
  return function createPlayer() { //createMario()
@@ -650,34 +678,22 @@ function loadZombie() { //Anush: loads Zombie sprite
 return loadPixelSheet('zombie')
     .then(createZombieFactory);
 }
-function createZombieFactory(playerPixel) {
+function createZombieFactory(pixel) {
 
-    console.log(playerPixel);
-   // const walkAnim = playerPixel.animations.get('walk');
+    console.log(pixel);
+  // const walkAnim = pixel.animations.set('walk');
 
    function drawZombie(ctx) {
-    playerPixel.build('walk-1', ctx, 0, 0);
+    pixel.build('walk-1', ctx, 0, 0);
    } 
 
    return function createZombie() {
         const zombie = new Entity();
         zombie.size.set(16, 16);
       
+      
 
-        zombie.addFeature({
-
-            NAME: 'walk',
-            speed: -30,
-            obstruct(zombie, side) {
-            	if (side === Sides.LEFT || side===Sides.RIGHT) {
-            		this.speed = -this.speed;
-            	}
-
-            },
-            update(zombie) {
-                zombie.velocity.x = this.speed;
-            }
-        })
+        zombie.addFeature(new featurePendulumWalk());
         zombie.build = drawZombie;
 
         return zombie;
@@ -686,6 +702,31 @@ function createZombieFactory(playerPixel) {
 }
 
 
+function loadZombie2() { //Anush: loads Zombie2 sprite
+return loadPixelSheet('zombie2')
+    .then(createZombie2Factory);
+}
+function createZombie2Factory(pixel) {
+
+    console.log(pixel);
+  // const walkAnim = pixel.animations.set('walk');
+
+   function drawZombie2(ctx) {
+    pixel.build('walk-1', ctx, 0, 0);
+   } 
+
+   return function createZombie2() {
+        const zombie2 = new Entity();
+        zombie2.size.set(32, 32);
+      
+
+        zombie2.addFeature(new featurePendulumWalk())
+        zombie2.build = drawZombie2;
+
+        return zombie2;
+
+   };
+}
 
 
 
@@ -721,7 +762,7 @@ function redraw(startIndex, endIndex) {
         ctx.drawImage(supplier,-camera.position.x, -camera.position.y);
     };
 }
-function createPixelLayer(item, width = 64, height = 64){
+function createPixelLayer(item, width = 64, height = 128){ //can adjust the size of entities
     const pixelsSupplier = document.createElement('canvas');
     pixelsSupplier.width = width;
       pixelsSupplier.height = height;
@@ -793,28 +834,48 @@ var canvas = document.getElementById('view');// Access the main canvas for paint
 var ctx = canvas.getContext('2d');// Access the context in order to use the API.
 
 
-Promise.all([ //Anush: main function to load all entities
-loadPlayer(),
-loadZombie(),
+
+function loadEntities() { //Anush: loads all Entities
+const entityFactories = {};
+   
+   function addAs(name) {   //Anush: just a helper function for load Entities
+    return factory => entityFactories[name]=factory;
+   }
+
+    return Promise.all ([   
+loadPlayer().then(addAs('player')),
+loadZombie().then(addAs('zombie')),
+loadZombie2().then(addAs('zombie2')),
+        ])
+    .then(() => entityFactories);
+}
+
+
+Promise.all([ //Anush: calls loadEntities function that loads Entities
+loadEntities(),
 drawLevel('level1'),
 
 ]) // Parallalizing the drawing time for the level pixels and the background
 
 
-.then(function([createPlayer,createZombie, level]){
+.then(function([factory, level]){
  
     const camera = new Camera();
     window.camera = camera;
     
-    const player = createPlayer(); //Anush: createPlayer()
+    const player = factory.player(); //Anush: createPlayer()
     player.position.set(32,32);
     level.Entity.add(player);
 
 
-    const zombie = createZombie(); // Anush: loading createZombie in the main function 
+    const zombie = factory.zombie(); // Anush: loading createZombie in the main function 
     zombie.position.x = 290;
     level.Entity.add(zombie);
 
+
+    const zombie2 = factory.zombie2(); // Anush: loading createZombie in the main function 
+    zombie2.position.x = 360;
+    level.Entity.add(zombie2);
 
 
     var gravity = 1500;   

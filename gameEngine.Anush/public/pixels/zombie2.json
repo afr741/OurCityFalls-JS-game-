@@ -1,0 +1,32 @@
+ 
+{
+	"imageURL": "/img/zombie2.png", 
+"frames": 	[
+
+		{
+			"name": "walk-1", 
+			"rect": [405, 389, 66, 127]
+		}, 
+
+
+		{
+			"name": "walk-2", 
+			"rect": [275, 383, 84, 133]
+		}
+		
+],
+
+"animations": [
+{
+		"name": "walk",
+		"frameLen": 0.15,
+		"frames": [
+			"walk-1",
+			"walk-2"
+			]
+		}
+
+	]
+}
+
+ 
