@@ -200,6 +200,8 @@ class Level {
     constructor(){
         this.orl = new OrderedLayers();
         this.Entity = new Set();
+        this.gravity = 1500;   
+        this.totalTime = 0;
         this.bricks = new Grid();
         this.brickCollision = new Collision(this.bricks);
         }
@@ -212,7 +214,9 @@ class Level {
             
             item.position.y += item.velocity.y * TimeDifference; // correlative relation between vel and position in y  based on time difference.
             this.brickCollision.YaxisCollision(item);
+            item.velocity.y +=this.gravity *TimeDifference;
             });
+            this.totalTime +=TimeDifference;
 
         }
     }
@@ -703,7 +707,7 @@ function createZombieFactory(pixel) {
 
 
 function loadZombie2() { //Anush: loads Zombie2 sprite
-return loadPixelSheet('zombie2')
+return loadPixelSheet('zombie2') //loads zombie2.json
     .then(createZombie2Factory);
 }
 function createZombie2Factory(pixel) {
@@ -739,12 +743,19 @@ function createbgLayer (level, pixels){   // create the background layer first
     var ctx = supplier.getContext('2d');
     supplier.width = 2048;
     supplier.height = 350;
-
+ 
 function redraw(startIndex, endIndex) {
     for (let x = startIndex; x <= endIndex; ++x) {
         const col = bricks.cell[x];
         if (col){
             col.forEach((brick,y) => {
+              /*  if (pixels.animations.has(brick.name)) {
+                    pixels.drawAnim(brick.name, ctx, x - startIndex, y, level.totalTime);
+                } else {
+                    pixels.buildBrick(brick.name, ctx, x - startIndex, y);
+                }
+
+*/
                 pixels.buildBrick(brick.name, ctx, x, y);
             });
         }
