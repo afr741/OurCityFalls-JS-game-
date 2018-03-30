@@ -18,7 +18,7 @@ class DrawingPixel {
         this.img = img;
         this.width = width;
         this.height = height;
-        this.tiles = new Map(); // create a map to save the subset image(supplier).
+        this.bricks = new Map(); // create a map to save the subset image(supplier).
    		this.animations = new Map();
     }
 
@@ -48,23 +48,23 @@ class DrawingPixel {
        
        return supplier;
     });
-        this.tiles.set(name, suppliers); // add the subset image to the map.
+        this.bricks.set(name, suppliers); // add the subset image to the map.
     }
    
     build(name, ctx, x, y, flip = false,) { // Sketch the subset.
-        var supplier = this.tiles.get(name)[flip ? 1: 0];
+        var supplier = this.bricks.get(name)[flip ? 1: 0];
         ctx.drawImage(supplier, x, y);
     }
 
     drawAnim(name, ctx, x,y, distance) {
     	const animation = this.animations.get(name);
-    	this.buildtile(animation(distance), ctx, x, y);
+    	this.buildBrick(animation(distance), ctx, x, y);
     }
 
-    locatetile(name,x,y){  // sketch the subsete with width and height for the Background tiles.
+    locateBrick(name,x,y){  // sketch the subsete with width and height for the Background tiles.
         this.locate(name,x * this.width, y * this.height,this.width,this.height);
         }
-    buildtile(name, ctx, x, y) {
+    buildBrick(name, ctx, x, y) {
         this.build(name, ctx, x * this.width, y * this.height);
     }
 
@@ -213,23 +213,20 @@ class Level {
     constructor(){
         this.orl = new OrderedLayers();
         this.Entity = new Set();
-        this.tileCollision = null;
+        this.bricks = new Grid();
+        this.brickCollision = new Collision(this.bricks);
         this.gravity = 2000;
         this.totalTime =0;
         }
-        setCollisionGrid(grid){
-            this.tileCollision = new Collision(grid);
-        }
-
         update(TimeDifference){
             this.Entity.forEach(item=>{
             item.update(TimeDifference);
             
             item.position.x += item.velocity.x * TimeDifference; // correlative relation between vel and position in x based on time difference.
-            this.tileCollision.XaxisCollision(item);
+            this.brickCollision.XaxisCollision(item);
             
             item.position.y += item.velocity.y * TimeDifference; // correlative relation between vel and position in y  based on time difference.
-            this.tileCollision.YaxisCollision(item);
+            this.brickCollision.YaxisCollision(item);
             });
 		this.totalTime +=TimeDifference;
         }
@@ -333,7 +330,7 @@ class Featureforward extends Feature {
  }
 
 
-class Grid {  // Grid class to accesses the x,y coordinates to determing tile type, i.e. path, background.
+class Grid {  // Grid class to accesses the x,y coordinates to determing brick type, i.e. path, background.
     constructor(){
         this.cell = [];
     }
@@ -368,29 +365,29 @@ class Grid {  // Grid class to accesses the x,y coordinates to determing tile ty
 }
 
 class Collision {
-    constructor(tileCollision){
-        this.tiles =new tileConverter(tileCollision);
+    constructor(brickCollision){
+        this.bricks =new BrickConverter(brickCollision);
     }
     YaxisCollision(item){ // Check path collision 
-    var intersections = this.tiles.coordinatesDistance(
+    var intersections = this.bricks.coordinatesDistance(
         item.position.x,item.position.x + item.size.x,
         item.position.y,item.position.y + item.size.y);
         
-        intersections.forEach(function(tileFound){
-        if (tileFound.tile.type!='path'){
+        intersections.forEach(function(brickFound){
+        if (brickFound.brick.type!='path'){
         return;
     }
     if (item.velocity.y > 0){ // run the detection to be for hitting the ground path.
-        if(item.position.y + item.size.y > tileFound.y1 ){
-            item.position.y = tileFound.y1 - item.size.y;
+        if(item.position.y + item.size.y > brickFound.y1 ){
+            item.position.y = brickFound.y1 - item.size.y;
             item.velocity.y = 0;
             item.obstruct(Sides.BOTTOM);
         }
     
     }
     else if (item.velocity.y < 0){ // run the detection to be for hitting the ceiling.  
-        if(item.position.y < tileFound.y2 ){
-                item.position.y = tileFound.y2;
+        if(item.position.y < brickFound.y2 ){
+                item.position.y = brickFound.y2;
                 item.velocity.y = 0;
              }
         }
@@ -399,23 +396,23 @@ class Collision {
 
 
     XaxisCollision(item){
-        var intersections = this.tiles.coordinatesDistance(
+        var intersections = this.bricks.coordinatesDistance(
             item.position.x,item.position.x + item.size.x,
             item.position.y,item.position.y + item.size.y);
             
-            intersections.forEach(function(tileFound){
-            if (tileFound.tile.type!='path'){
+            intersections.forEach(function(brickFound){
+            if (brickFound.brick.type!='path'){
             return;
         }
-        if (item.velocity.x > 0){ //If Player passed the path tile, move the player back to the path 
-            if(item.position.x +item.size.x > tileFound.x1 ){
-                item.position.x = tileFound.x1 - item.size.x;
+        if (item.velocity.x > 0){ //If Player passed the path brick, move the player back to the path 
+            if(item.position.x +item.size.x > brickFound.x1 ){
+                item.position.x = brickFound.x1 - item.size.x;
                 item.velocity.x = 0;
             }
         }
-        else if (item.velocity.x < 0){ //If Player passed the path tile, move the player back to the path 
-            if(item.position.x < tileFound.x2 ){
-                    item.position.x = tileFound.x2;
+        else if (item.velocity.x < 0){ //If Player passed the path brick, move the player back to the path 
+            if(item.position.x < brickFound.x2 ){
+                    item.position.x = brickFound.x2;
                     item.velocity.x = 0;
                  }
             }
@@ -431,39 +428,39 @@ class Collision {
     }
     
 
-class tileConverter { // convert the world positions coordinates into tile coordinates x,y. 
-    constructor(grid, tileSize = 16){
+class BrickConverter { // convert the world positions coordinates into brick coordinates x,y. 
+    constructor(grid, brickSize = 16){
         this.grid = grid;
-        this.tileSize = tileSize;
+        this.brickSize = brickSize;
         
     }
-    tilecoordintes(position){
-        return Math.floor(position / this.tileSize); // return the  coordinates
+    Brickcoordintes(position){
+        return Math.floor(position / this.brickSize); // return the  coordinates
     }
     
-    DistanceMatched(positionA,positionB){ // return a tile based on its coordinates.
-        var MaxPos = Math.ceil(positionB / this.tileSize) * this.tileSize;
+    DistanceMatched(positionA,positionB){ // return a brick based on its coordinates.
+        var MaxPos = Math.ceil(positionB / this.brickSize) * this.brickSize;
         var Difference = [];
         var position = positionA;
         
         do {
-            Difference.push(this.tilecoordintes(position));
-            position = position + this.tileSize;
+            Difference.push(this.Brickcoordintes(position));
+            position = position + this.brickSize;
         }
         while(position < MaxPos);
             return Difference;
 
     }
     coordinatesMet(coordinateX,coordinateY){ /*coordinatesMet method ask the 
-                                            matrix for the tile given it is coordinates*/
-    var tile = this.grid.get(coordinateX,coordinateY);
-    if(tile){
-    var y1 = coordinateY * this.tileSize;
-    var y2 = y1 + this.tileSize;
-    var x1 = coordinateX * this.tileSize;
-    var x2 = x1 + this.tileSize;
+                                            matrix for the brick given it is coordinates*/
+    var brick = this.grid.get(coordinateX,coordinateY);
+    if(brick){
+    var y1 = coordinateY * this.brickSize;
+    var y2 = y1 + this.brickSize;
+    var x1 = coordinateX * this.brickSize;
+    var x2 = x1 + this.brickSize;
         return{
-            tile,
+            brick,
             x1,
             x2,
             y1,
@@ -472,17 +469,17 @@ class tileConverter { // convert the world positions coordinates into tile coord
         };
     }
 }  
-coordinatesPos(positionX,positionY){ // return the tile coordinates from the coordinatesMet method.
-    return this.coordinatesMet(this.tilecoordintes(positionX),
-    this.tilecoordintes(positionY));
+coordinatesPos(positionX,positionY){ // return the brick coordinates from the coordinatesMet method.
+    return this.coordinatesMet(this.Brickcoordintes(positionX),
+    this.Brickcoordintes(positionY));
 }
 coordinatesDistance(x1,x2,y1,y2){
     var intersections = [];
     this.DistanceMatched(x1,x2).forEach(coordinateX =>{
         this.DistanceMatched(y1,y2).forEach(coordinateY =>{
-            var tileFound = this.coordinatesMet(coordinateX, coordinateY);
-                if (tileFound) {
-                    intersections.push(tileFound);
+            var brickFound = this.coordinatesMet(coordinateX, coordinateY);
+                if (brickFound) {
+                    intersections.push(brickFound);
                 }
             });
         });
@@ -504,71 +501,52 @@ function drawImage(url) { // Function to load images from the the img folder.
  return fetch(url) //fetch allows to make network requests and return Json() object.
     .then(drw => drw.json());
 }
-function* expandSpan(xStart, xLen, yStart, yLen) {
-    const xEnd = xStart +xLen;
-    const yEnd = yStart +yLen;
-    for (let x = xStart; x < xEnd; ++x) {
-        for (let y = yStart; y < yEnd; ++y) {
-            yield{x,y};
-        }
-    }    
-}  
-
-function expandRange(range) {
-    if (range.length == 4) {
-        const [xStart, xLen, yStart, yLen] = range;
-         return expandSpan(xStart, xLen, yStart, yLen);
-  
-    } else if (range.length == 3) {
-        const [xStart, xLen, yStart] = range;
-         return expandSpan(xStart, xLen, yStart, 1); //if there is only one "1" in the end, you can delete them
-
-    } else if (range.length == 2) {        //if there are two "1" in the end, you can delete them
-        const [xStart, yStart] = range;
-        return expandSpan(xStart, 1, yStart, 1);
-        
-    }
+    
+function buildBricks(level,Levelbck, patterns, offsetX = 0, offsetY = 0){  // Iterate through the Json file reading the dimensions of the x's anmd
+    function applyRange(background, xStart, xLen, yStart, yLen) {
+        const xEnd = xStart +xLen;
+          const yEnd = yStart +yLen;
+        for (let x = xStart; x < xEnd; ++x) {
+            for (let y = yStart; y < yEnd; ++y) {
+                const deriveX = x + offsetX;
+                const deriveY = y + offsetY;
+                if(background.pattern) {
+                        const Levelbck = patterns[background.pattern].Levelbck;
+                        buildBricks(level, Levelbck, patterns, deriveX, deriveY);
+                        console.log('Pattern detected', patterns[background.pattern]);
+                    }
+                else {
+                    level.bricks.set(deriveX, deriveY, {
+                        name:background.brick,
+                        type:background.type,
+            });
+           }
+       }
+   }
 }
 
-function* expandRanges(ranges) {
-    for (const range of ranges) {
-        for(const item of expandRange(range)) {
-            yield item;
-        }
-    } 
 
+
+    Levelbck.forEach(function(background){ // reducing number of arguments in j.son file
+    background.dimensions.forEach(range => {
+               if (range.length == 4) {
+            const [xStart, xLen, yStart, yLen] = range;
+            applyRange(background, xStart, xLen, yStart, yLen);
+      
+        } else if (range.length == 3) {
+            const [xStart, xLen, yStart] = range;
+            applyRange(background, xStart, xLen, yStart, 1); //if there is only one "1" in the end, you can delete them
+
+        } else if (range.length == 2) {        //if there are two "1" in the end, you can delete them
+            const [xStart, yStart] = range;
+            applyRange(background, xStart, 1, yStart, 1);
+            
+          
+            }
+    });
+
+    });
 }
-
-function expandTiles(tiles, patterns){ 
-  const expandedTiles = [];
-        function walkTiles(tiles, offsetX, offsetY) {
-
-        
-            for(const tile of tiles){ 
-                for(const {x,y} of expandRanges(tile.ranges)){
-                    const deriveX = x + offsetX;
-                    const deriveY = y + offsetY;
-
-                    if(tile.pattern) {
-                            const tiles = patterns[tile.pattern].tiles;
-                            walkTiles(tiles, deriveX, deriveY);
-                        // console.log('Pattern detected', patterns[tile.pattern]);
-                        }
-                    else {
-                            expandedTiles.push({
-                                tile,
-                                x: deriveX,
-                                y: deriveY,
-                            });
-                            
-                        }
-                    }    
-                }
-            }  
-            walkTiles(tiles, 0, 0); 
-
-            return expandedTiles;
-    }
 
 
 function loadPixelSheet(name) {
@@ -583,12 +561,12 @@ return loadJSON(`/pixels/${name}.json`)
                             sheetSpec.tileW, 
                             sheetSpec.tileH);
 
-        if(sheetSpec.tiles) {
-        sheetSpec.tiles.forEach(tileSpec => {
-            pixels.locatetile(
-                tileSpec.name,
-                tileSpec.index[0],
-                tileSpec.index[1]);
+        if(sheetSpec.bricks) {
+        sheetSpec.bricks.forEach(brickSpec => {
+            pixels.locateBrick(
+                brickSpec.name,
+                brickSpec.index[0],
+                brickSpec.index[1]);
         });
        }
 
@@ -637,42 +615,17 @@ function drawLevel(name) { // draw Level function to read Json files
 
  
     .then(function([levelDetails,pixels]){
-        var level = new Level(); // The ordered levels are instanciated on the level object.
-
-        const mergedTiles = levelDetails.layers.reduce((mergedTiles, layerSpec) => {
-                return mergedTiles.concat(layerSpec.tiles);
-        },[]);
-
-        const collisionGrid = createCollisionGrid(mergedTiles, levelDetails.patterns);
-        level.setCollisionGrid(collisionGrid);
-
-        levelDetails.layers.forEach(layer => {
-                const backgroundGrid = createBackgroundGrid(layer.tiles, levelDetails.patterns);
-                var bgLayer = createbgLayer(level, backgroundGrid, pixels);
-                level.orl.layers.push(bgLayer);// add the layers in order to the ordered layer instance on the level.
-        });       
+        var level = new Level(); // The oredered levels are instanciated on the level object.
+        buildBricks(level,levelDetails.Levelbck, levelDetails.patterns);
+        var bgLayer = createbgLayer(level,pixels);
+        level.orl.layers.push(bgLayer);// add the layers in order to the ordered layer instance on the level.
+        
         var pixelLayer = createPixelLayer(level.Entity);
         level.orl.layers.push(pixelLayer); // add the layers in order to the ordered layer instance on the level.
         return level;
     });
 }
-function createCollisionGrid(tiles, patterns) {
-    const grid = new Grid();
 
-    for(const {tile, x, y} of expandTiles(tiles,patterns)) {
-        grid.set(x, y, { type: tile.type, });
-    }
-    return grid;
-}
-
-function createBackgroundGrid(tiles, patterns) {
-    const grid = new Grid();
-
-    for(const {tile, x, y} of expandTiles(tiles,patterns)) {
-        grid.set(x, y, { name: tile.name, });
-    }
-    return grid;
-}
 
 
 
@@ -735,29 +688,36 @@ return Player;
 
 
 
-function createbgLayer (level, tiles, pixels){   // create the background layer first
-    var resolver = new tileConverter(tiles);
+function createbgLayer (level, pixels){   // create the background layer first
+    var bricks = level.bricks;
+    var resolver = level.brickCollision.bricks;
 
     var supplier = document.createElement('canvas');
     var ctx = supplier.getContext('2d');
     supplier.width = 256+16;
     supplier.height = 240;
  
+let startIndex, endIndex;
 
+function redraw(drawFrom, drawTo) {
+  //  if (drawFrom === startIndex && drawTo ===endIndex) {
+    //	return;
+  //  }
 
-function redraw(startIndex, endIndex) {
+   	startIndex = drawFrom;
+   	endIndex = drawTo;
 
-  ctx.clearRect(0,0, supplier.width, supplier.height);  
-  for (let x = startIndex; x <=endIndex; ++x) {
-        const col = tiles.cell[x];
+   	
+   	for (let x = startIndex; x <=endIndex; ++x) {
+        const col = bricks.cell[x];
         if (col){
-            col.forEach((tile,y) => {
-            	if (pixels.animations.has(tile.name)) {
-            		pixels.drawAnim(tile.name, ctx, x - startIndex, y, level.totalTime);
+            col.forEach((brick,y) => {
+            	if (pixels.animations.has(brick.name)) {
+            		pixels.drawAnim(brick.name, ctx, x - startIndex, y, level.totalTime);
 
             	} else {
 
-                pixels.buildtile(tile.name, ctx, x- startIndex, y);
+                pixels.buildBrick(brick.name, ctx, x- startIndex, y);
             			}
             });
         }
@@ -768,8 +728,8 @@ function redraw(startIndex, endIndex) {
 
     return function drawBgLayer(ctx, camera) {
 
-        var drawWidth = resolver.tilecoordintes(camera.size.x);
-        var drawFrom = resolver.tilecoordintes(camera.position.x);
+        var drawWidth = resolver.Brickcoordintes(camera.size.x);
+        var drawFrom = resolver.Brickcoordintes(camera.position.x);
         var drawTo = drawFrom + drawWidth;
         redraw(drawFrom, drawTo);
 
@@ -796,22 +756,22 @@ return function drawPlayerLayer(ctx, camera){
 }
 
 function CollisionDetectionLayer(level){
-    var convertedtiles = []; 
-    var tileConverter = level.tileCollision.tiles;
-    var tileSize = tileConverter.tileSize;
-    var coordinatesMetinitial = tileConverter.coordinatesMet;
-    tileConverter.coordinatesMet = function VertualcoordinatesMet(x,y){
-    convertedtiles.push({x,y});
-    return coordinatesMetinitial.call(tileConverter,x,y)
+    var convertedBricks = []; 
+    var brickConverter = level.brickCollision.bricks;
+    var brickSize = brickConverter.brickSize;
+    var coordinatesMetinitial = brickConverter.coordinatesMet;
+    brickConverter.coordinatesMet = function VertualcoordinatesMet(x,y){
+    convertedBricks.push({x,y});
+    return coordinatesMetinitial.call(brickConverter,x,y)
     }   
 
     return function detectCollision(ctx, camera){
-        convertedtiles.forEach(function({x, y}){
+        convertedBricks.forEach(function({x, y}){
             //console.log('Working');
          ctx.beginPath();
-         ctx.rect(x * tileSize - camera.position.x,
-            y * tileSize, - camera.position.y, 
-             tileSize, tileSize);
+         ctx.rect(x * brickSize - camera.position.x,
+            y * brickSize, - camera.position.y, 
+             brickSize, brickSize);
          ctx.stroke();
         });
         level.Entity.forEach(function(item){
@@ -822,7 +782,7 @@ function CollisionDetectionLayer(level){
              item.size.y);
         ctx.stroke();
         });
-        convertedtiles.length = 0;
+        convertedBricks.length = 0;
         }
     }
 function createCameraLayer(cameraToDraw) {

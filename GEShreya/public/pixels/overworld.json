@@ -4,7 +4,7 @@
 	"tileW":16,
 	"tileH":16,
 
-	"bricks": [
+	"tiles": [
 {
 	"name": "path",
 	"index": [0, 18]
@@ -32,28 +32,44 @@
 
 {
 	"name": "chance-1",
-	"index": [24, 0]
+	"index": [4, 3]
 },
-
 {
 	"name": "chance-2",
-	"index": [25, 0]
+	"index": [5, 5]
 },
 {
 	"name": "chance-3",
-	"index": [26, 0]
+	"index": [6, 2]
+},
+{
+	"name": "wall-insert-vert-left",
+	"index": [4,19]
+},
+{
+	"name": "wall-insert-vert-right",
+	"index": [4,19]
+},
+{
+	"name": "wall-vert-left",
+	"index": [4,19]
+},
+{
+	"name": "wall-vert-right",
+	"index": [4,19]
 }
-
 	], 
 	"animations": [
 		{
 
 			"name": "chance", 
-			"frameLen": 1,
+			"frameLen": 0.40,
 			"frames" : [
 				"chance-1",
+				"chance-1",
 				"chance-2",
-				"chance-3"
+				"chance-3",
+				"chance-2"
 			]
 
 		}
