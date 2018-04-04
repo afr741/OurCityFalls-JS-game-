@@ -1,7 +1,7 @@
 function Player() {
     var gameUI = GameUI.getInstance();
   
-    this.type = 'small';
+    this.type = 'normal';
     this.x;
     this.y;
     this.width = 32;
@@ -32,30 +32,34 @@ function Player() {
     };
   
     this.checkPlayerType = function() {
-      if (that.type == 'big') {
+      if (that.type == 'armor') {
         that.height = 60;
   
-        //big player sprite position
+        //armored player sprite position
         if (that.invulnerable) {
-          that.spriteY = 276; //if invulnerable, show transparent player
+          that.spriteY = 276; //if invulnerable, show red player
         } else {
           that.spriteY = 90;
         }
-      } else if (that.type == 'small') {
+      } else if (that.type == 'normal') {
         that.height = 44;
   
-        //small player sprite
+        //normal player sprite
         if (that.invulnerable) {
-          that.spriteY = 222; //if invulnerable, show transparent player
+          that.spriteY = 222; //if invulnerable, show red player
         } else {
           that.spriteY = 4;
         }
-      } else if (that.type == 'fire') {
+      } else if (that.type == 'shotgun') {
         that.height = 44;
   
-        //fire player sprite
+        //shotgun player sprite
+        that.spriteY = 165;
+      } else if(that.type == 'shotgunWithArmor'){
+        that.height = 44;
         that.spriteY = 165;
       }
+
     };
   
     this.resetPos = function() {
