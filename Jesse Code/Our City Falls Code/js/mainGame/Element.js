@@ -34,7 +34,7 @@ function Element() {
       that.spriteX = 3 * that.width;
     };
   
-    this.levelWinFlag = function() {
+    this.mapPiece = function() {
       that.type = 5;
       that.spriteX = 4 * that.width;
     };
