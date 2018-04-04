@@ -41,7 +41,9 @@ function Preloader() {
         23: 'images/slider-left.png',
         24: 'images/slider-right.png',
         25: 'images/start-btn.png',
-        26: 'images/enemies2.png'
+        26: 'images/enemies2.png',
+        27: 'images/options-btn.png',
+        28: 'images/profile-btn.png'
       };
   
       that.loadImages(imageSources);
