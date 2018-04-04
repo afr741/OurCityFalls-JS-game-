@@ -58,12 +58,12 @@ function CreatedLevels() {
     };
   
     this.startLevel = function(i) {
-      var marioMakerInstance = Menu.getInstance();
+      var editorInstance = Menu.getInstance();
       var levelName = storage.getItemName(i);
       var level = storage.getItem(levelName);
       var map = { 1: level }; //always only one level in saved maps.
   
-      marioMakerInstance.startGame(map);
+      editorInstance.startGame(map);
     };
   
     this.showCreatedLevelsScreen = function() {
