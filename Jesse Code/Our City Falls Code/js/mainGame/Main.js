@@ -54,7 +54,7 @@ function Main() {
   
       currentLevel = level;  // track current level
       originalMaps = levelMaps; // hard-coded maps
-      map = JSON.parse(levelMaps[currentLevel]);
+      map = JSON.parse(levelMaps[currentLevel]);    //parse through json map
   
       if (!score) {
         //so that when level changes, it uses the same instance
@@ -148,12 +148,12 @@ function Main() {
       player.draw();
       that.updatePlayer();
       that.wallCollision();
-      playerInGround = player.grounded; //for use with flag sliding
+      playerInGround = player.grounded; //for use with picking up mapPiece
     };
   
     this.showInstructions = function() {
-      gameUI.writeText('Controls: Use arrow keys to move/jump, shift to run, c to shoot', 30, 30);
-      gameUI.writeText('Tip: Jumping while running makes you jump higher', 30, 60);
+      //gameUI.writeText('Controls: Use arrow keys to move/jump, shift to run, c to shoot', 30, 30);
+      //gameUI.writeText('Tip: Jumping while running makes you jump higher', 30, 60);
     };
   
     this.renderMap = function() {
@@ -218,10 +218,10 @@ function Main() {
               that.checkElementBulletCollision(element);
               break;
   
-            case 5: //levelWinFlag
+            case 5: //mapPiece
               element.x = column * tileSize;
               element.y = row * tileSize;
-              element.levelWinFlag();
+              element.mapPiece();
               element.draw();
   
               that.checkElementPlayerCollision(element, row, column);
@@ -328,13 +328,13 @@ function Main() {
           if (vY > 0 && vY < 37) {
             collisionDirection = 't';
             if (objB.type != 5) {
-              //if levelWinFlag then pass through it
+              //if mapPiece then pass through it
               objA.y += offsetY;
             }
           } else if (vY < 0) {
             collisionDirection = 'b';
             if (objB.type != 5) {
-              //if levelWinFlag then pass through it
+              //if mapPiece then pass through it
               objA.y -= offsetY;
             }
           }
@@ -366,8 +366,8 @@ function Main() {
 
         /*if(element.type == 11){
           //spikes
-          if (player.type == 'big') {
-            player.type = 'small';
+          if (player.type == 'armor') {
+            player.type = 'normal';
             player.invulnerable = true;
             collWithPlayer = undefined;
 
@@ -377,8 +377,8 @@ function Main() {
             setTimeout(function() {
               player.invulnerable = false;
             }, 1000);
-          } else if (player.type == 'fire') {
-            player.type = 'big';
+          } else if (player.type == 'shotgun') {
+            player.type = 'armor';
             player.invulnerable = true;
 
             collWithPlayer = undefined;
@@ -389,7 +389,7 @@ function Main() {
             setTimeout(function() {
               player.invulnerable = false;
             }, 1000);
-          } else if (player.type == 'small') {
+          } else if (player.type == 'normal') {
             //kill player if collision occurs when he is small
             that.pauseGame();
 
@@ -429,21 +429,21 @@ function Main() {
           //PowerUp Box
           var powerUp = new PowerUp();
   
-          //gives armor if player is small, otherwise gives gun
-          if (player.type == 'small') {
+          //gives armor if player is normal, otherwise gives shotgun
+          if (player.type == 'normal') {
             powerUp.armor(element.x, element.y);
             powerUps.push(powerUp);
-          } else {
+          } else if (player.type == 'armor') {
             powerUp.shotgun(element.x, element.y);
             powerUps.push(powerUp);
+          } else if(player.type == 'shotgun'){
+            powerUp.armor(element.x, element.y);
+            powerUps.push(powerUp);
+          } else if(player.type == 'shotgunWithArmor'){
+              
           }
 
-          //give grenade if player is fire type
-          if(player.type == 'fire'){
-            powerUp.grenade(element.x, element.y);
-            powerUps.push(powerUp);
-          }
-  
+         
           map[row][column] = 0; //sets to useless box after powerUp appears
   
           //sound when armor appears
@@ -464,11 +464,11 @@ function Main() {
   
         if (element.type == 2) {
           //Coin Box
-          score.coinScore++;
+          /*score.coinScore++;
           score.totalScore += 100;
   
           score.updateCoinScore();
-          score.updateTotalScore();
+          score.updateTotalScore();*/
           map[row][column] = 0; //sets to useless box after coin appears
   
           //sound when coin block is hit
@@ -496,7 +496,10 @@ function Main() {
           var collisionDirection = that.collisionCheck(zombies[i], element);
   
           if (collisionDirection == 'l' || collisionDirection == 'r') {
-            zombies[i].xVelocity *= -1;
+            zombies[i].xVelocity *= -1.12;
+            if(zombies[i].xVelocity >= 7){
+                zombies[i].xVelocity = -1;
+            }
           } else if (collisionDirection == 'b') {
             zombies[i].grounded = true;
           }
@@ -521,20 +524,25 @@ function Main() {
       for (var i = 0; i < powerUps.length; i++) {
         var collWithPlayer = that.collisionCheck(powerUps[i], player);
         if (collWithPlayer) {
-          if (powerUps[i].type == 30 && player.type == 'small') {
+          if (powerUps[i].type == 30 && player.type == 'normal') {
             //armor
-            player.type = 'big';
-          } else if (powerUps[i].type == 31) {
-            //shotgun
-            player.type = 'fire';
-          } else if(powerUps[i].type == 32){
+            player.type = 'armor';
+          } else if (powerUps[i].type == 31 && player.type == 'armor') {
+            //shotgunWithArmor
+            player.type = 'shotgunWithArmor';
+          } else if(powerUps[i].type == 30 && player.type == 'shotgun'){
+              //shotgun no armor
+              player.type == "shotgunWithArmor";
+          }
+          
+          else if(powerUps[i].type == 32){
             //Grenade
             player.type = 'grenade';
           }
 
           powerUps.splice(i, 1);
   
-          score.totalScore += 1000;
+          score.totalScore += 250;
           score.updateTotalScore();
   
           //sound when powerup appears
@@ -555,7 +563,7 @@ function Main() {
   
             player.yVelocity = -player.speed;
   
-            score.totalScore += 1000;
+            score.totalScore += 750;    //more points for jumping on enemies versus shooting them
             score.updateTotalScore();
   
             //sound when enemy dies
@@ -563,8 +571,8 @@ function Main() {
           } else if (collWithPlayer == 'r' || collWithPlayer == 'l' || collWithPlayer == 'b') {
             zombies[i].xVelocity *= -1;
   
-            if (player.type == 'big') {
-              player.type = 'small';
+            if (player.type == 'armor') {
+              player.type = 'normal';
               player.invulnerable = true;
               collWithPlayer = undefined;
   
@@ -574,8 +582,8 @@ function Main() {
               setTimeout(function() {
                 player.invulnerable = false;
               }, 1000);
-            }/* else if (player.type == 'fire') {
-              player.type = 'small';
+            } else if (player.type == 'shotgunWithArmor') {
+              player.type = 'shotgun';
               player.invulnerable = true;
   
               collWithPlayer = undefined;
@@ -586,8 +594,8 @@ function Main() {
               setTimeout(function() {
                 player.invulnerable = false;
               }, 1000);
-            }*/ else if (player.type == 'small' || player.type == 'fire' || player.type == 'grenade') {
-              //kill player if collision occurs when he is small
+            } else if (player.type == 'normal' || player.type == 'shotgun' || player.type == 'grenade') {
+              //kill player if collision occurs when he is normal
               that.pauseGame();
   
               player.frame = 13;
@@ -622,12 +630,12 @@ function Main() {
           }
   
           if (collWithBullet) {
-            bullets[j] = null;
+            bullets[j] = null;  //destroy bullet
             bullets.splice(j, 1);
   
             zombies[i].state = 'deadFromBullet';
   
-            score.totalScore += 1000;
+            score.totalScore += 500;
             score.updateTotalScore();
   
             //sound when enemy dies
@@ -642,7 +650,7 @@ function Main() {
     }*/
   
     this.wallCollision = function() {
-      //for walls (vieport walls)
+      //for walls at end of the screen
       if (player.x >= maxWidth - player.width) {
         player.x = maxWidth - player.width;
       } else if (player.x <= translatedDist) {
@@ -659,6 +667,7 @@ function Main() {
         score.lifeCount--;
         score.updateLifeCount();
   
+        //if the player runs out of lives, reset the game after 3 seconds
         timeOutId = setTimeout(function() {
           if (score.lifeCount == 0) {
             that.gameOver();
@@ -674,12 +683,12 @@ function Main() {
       var friction = 0.91;
       var gravity = 0.2;
 
-      /*if(player.type == 'big'){
+      /*if(player.type == 'armor'){
           gravity = 0.5;
           friction = 0.60;
       }*/
   
-      player.checkPlayerType();    //check player type: normal, armor, shotgun, grenade
+      player.checkPlayerType();    //check player type: normal, armor, shotgunWithArmor, shotgunWithoutarmor grenade
   
       if (keys[38] || keys[32]) {
         //up arrow
@@ -753,7 +762,29 @@ function Main() {
         player.speed = 3;
       }
   
-      if (keys[83] && player.type == 'fire') {
+      if (keys[83] && player.type == 'shotgun') {
+        //s key
+        if (!bulletFlag) {
+          bulletFlag = true;
+          var bullet = new Bullet();
+          if (player.frame == 9 || player.frame == 8 || player.frame == 3) {
+            var direction = -1;
+          } else {
+            var direction = 1;
+          }
+          bullet.init(player.x, player.y, direction);
+          bullets.push(bullet);
+  
+          //bullet sound
+          gameSound.play('bullet');
+  
+          setTimeout(function() {
+            bulletFlag = false; //only lets player fire bullet after 800ms.
+          }, 800);
+        }
+      }
+
+      if (keys[83] && player.type == 'shotgunWithArmor') {
         //s key
         if (!bulletFlag) {
           bulletFlag = true;
@@ -833,7 +864,7 @@ function Main() {
     };
   
     this.levelFinish = function(collisionDirection) {
-      //game finishes when player slides the levelWinFlag and collides with the ground
+      //game finishes when player collides with a piece of the map
       if (collisionDirection == 'r') {
         player.x += 10;
         player.yVelocity = 2;
@@ -857,7 +888,9 @@ function Main() {
   
           //sound when stage clears
           gameSound.play('stageClear');
-  
+
+          
+          //timer for transitioning to next level
           timeOutId = setTimeout(function() {
             currentLevel++;
             if (originalMaps[currentLevel]) {
@@ -866,7 +899,7 @@ function Main() {
             } else {
               that.gameOver();
             }
-          }, 5000);
+          }, 3000);
         }
       }
     };
@@ -881,6 +914,7 @@ function Main() {
       gameUI.writeText('You have died.', centerPos - 80, height - 300);
       gameUI.writeText('Dr. Pandemic will now take over the world', centerPos - 122, height / 2);
 
+      level1Song.pause();
     };
   
     this.resetGame = function() {
