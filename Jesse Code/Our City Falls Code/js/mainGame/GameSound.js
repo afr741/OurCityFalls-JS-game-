@@ -27,6 +27,7 @@ function GameSound() {
       level3Song = new Audio('sounds/Juhani Junkala [Retro Game Music Pack] Level 3.wav');
       level4Song = new Audio('sounds/Juhani Junkala [Retro Game Music Pack] Level 2.wav');
       level5Song = new Audio('sounds/Juhani Junkala [Retro Game Music Pack] Level 2.wav');
+      levelEditorSong = new Audio('sounds/Juhani Junkala [Retro Game Music Pack] Ending.wav');
     };
   
     this.play = function(element) {
