@@ -9,20 +9,39 @@ var Menu = (function() {
       var mainWrapper;
       var startScreen;
       var btnWrapper;
-  
+      var signinScreen;
+      var signinImg;
+      var confirmPass;
+      var signupScreen;
+      var userName1;
+      var userName2;
+      var pass;
+      var pass1;
       var editorButton;
       var startGameButton;
       var createdLevelsButton;
       var signupButton;
       var signinButton;
       var editorStarted = 0;
-  
       var backToMenuBtn;
-  
+      var submitButton;
+      var forgotButton;
+      var forgotPassScreen;
       //instances
       var playerGame;
       var editor;
       var createdLevels;
+      var inp1;
+      var inp2;
+      var inp3;
+      var inp4;
+      var inp5;
+      var inp6;
+      var inp7;
+      var formdiv1;
+      var formdiv2;
+      var Reg;
+      var submitButton2;
   
       var that = this;
   
@@ -34,21 +53,50 @@ var Menu = (function() {
   
         //main menu screen
         mainWrapper = view.getMainWrapper();
+        formdiv1 = view.create('div');
+        formdiv2 = view.create('div');
         startScreen = view.create('div');
+        signinScreen = view.create('div');
+        signupScreen = view.create('div');
+        forgotPassScreen = view.create('div');
+        userName1 = view.create('div');
+        userName2 = view.create('div');
+        pass = view.create('div');
+        pass1 = view.create('div');
+        confirmPass = view.create('div');
+        eAddress = view.create('div');
+        eAddressMsg = view.create('div');
         /*optionsScreen = view.create('div');*/
         /*profileScreen = view.create('div');*/
         btnWrapper = view.create('div');
         editorButton = view.create('button');
         startGameButton = view.create('button');
+        submitButton = view.create('button');
+        submitButton2 = view.create('button');
+        Reg = view.create('button');
+        forgotButton = view.create('button');
         optionsButton = view.create('button');
         profileButton = view.create('button');
         signupButton = view.create('button')
         signinButton = view.create('button')
         createdLevelsButton = view.create('div');
         backToMenuBtn = view.create('button');
-  
+        inp1 = view.create('input');
+        inp2 = view.create('input');
+        inp3 = view.create('input');
+        inp4 = view.create('input');
+        inp5 = view.create('input');
+        inp6 = view.create('input');
+        inp7 = view.create('input');
+        
+        
+        view.addClass(formdiv1, 'formClass1');
+        view.addClass(formdiv2, 'formClass2');
+        view.addClass(signinScreen, 'signinScreen');
         view.addClass(btnWrapper, 'btn-wrapper');
         view.addClass(startScreen, 'mainMenu');
+        view.addClass(forgotPassScreen, 'forgotScreen');
+        view.addClass(signupScreen, 'signupScreen');
         view.addClass(optionsButton, 'options-btn');
         view.addClass(profileButton, 'profile-btn');
         view.addClass(editorButton, 'editor-btn');
@@ -57,9 +105,27 @@ var Menu = (function() {
         view.addClass(signupButton, 'signup-btn');
         view.addClass(createdLevelsButton, 'created-btn');
         view.addClass(backToMenuBtn, 'back-btn');
+        view.addClass(userName1, 'user-name1');
+        view.addClass(userName2, 'user-name2');
+        view.addClass(pass, 'password');
+        view.addClass(pass1, 'password1');
+        view.addClass(submitButton, 'submit-btn');
+        view.addClass(submitButton2, 'submit-btn');
+        view.addClass(forgotButton, 'forgot-btn');
+        view.addClass(confirmPass, 'conf-pass');
+        view.addClass(eAddress, 'E-Add');
+        view.addClass(Reg, 'Reg-btn');
+        view.addClass(inp1, 'inp1');
+        view.addClass(inp2, 'inp2');
+        view.addClass(inp3, 'inp3');
+        view.addClass(inp4, 'inp4');
+        view.addClass(inp5, 'inp5');
+        view.addClass(inp6, 'inp6');
+
   
         view.append(startScreen, editorButton);
         view.append(startScreen, optionsButton);
+        //view.append(startScreen, signinButton);
         view.append(startScreen, signinButton);
         view.append(startScreen, signupButton);
         view.append(startScreen, startGameButton);
@@ -68,27 +134,69 @@ var Menu = (function() {
         view.append(btnWrapper, backToMenuBtn);
         view.append(mainWrapper, startScreen);
         view.append(mainWrapper, btnWrapper);
-
+        view.append(mainWrapper, signinScreen);
+        view.append(mainWrapper, signupScreen);
+        view.append(signinScreen, userName1);
+        view.append(signupScreen, userName2);
+        view.append(signupScreen, eAddress);
+        view.append(signinScreen, pass);
+        view.append(signupScreen, pass1);
+        view.append(signupScreen, confirmPass);
+        view.append(signupScreen, Reg);
+        view.append(signinScreen, submitButton);
+        view.append(signinScreen, forgotButton);
+        view.append(formdiv1, inp1);
+        view.append(formdiv1, inp2);
+        view.append(signinScreen, formdiv1);
+        view.append(formdiv2, inp3);
+        view.append(formdiv2, inp4);
+        view.append(signupScreen, formdiv2);
+        view.append(formdiv2, inp5);
+        view.append(formdiv2, inp6);
+        view.append(signupScreen, formdiv2);
         
-  
+
         editorButton.onclick = that.startEditor;
-  
+        signinButton.onclick = that.signinScreen;
+        signupButton.onclick = that.signupScreen;
         createdLevelsButton.onclick = that.startCreatedLevels;
   
         if (that.editorStarted){
-          backToMenuBtn.onclick = that.backToMenu;
+        backToMenuBtn.onclick = that.backToMenu;
         }
         else if (that.startGame){
           backToMenuBtn.onclick = that.backToMenu;
-        }
-  
+        } 
+        
+        
         startGameButton.onclick = function() {
           map = that.loadMainGameMap();
           that.startGame(map);
           
           
         };
-      };
+
+        signinButton.onclick = function() {
+          that.hideMainMenu();
+
+          backToMenuBtn.onclick = that.showMainMenu;
+          view.style(backToMenuBtn, { display: 'block' });
+          view.style(signinScreen, { display: 'block' });
+
+        };
+        signupButton.onclick = function() {
+          that.hideMainMenu();
+
+          backToMenuBtn.onclick = that.showMainMenu;
+          view.style(signupScreen, { display: 'block' });
+          view.style(backToMenuBtn, { display: 'block' });
+          
+
+        };
+
+
+
+      }
   
       this.loadMainGameMap = function() {
         var map = {
@@ -103,6 +211,7 @@ var Menu = (function() {
       };
   
       this.startGame = function(levelMap) {
+        backToMenuBtn.onclick = that.showMainMenu;
         view.style(backToMenuBtn, { display: 'block' });
 
         
@@ -123,6 +232,7 @@ var Menu = (function() {
       };
   
       this.startEditor = function() {
+        backToMenuBtn.onclick = that.showMainMenu;
         view.style(backToMenuBtn, { display: 'block' });
   
         if (editorStarted == 0) {
@@ -137,6 +247,7 @@ var Menu = (function() {
         that.hideMainMenu();
         playerGame.removeGameScreen();
         createdLevels.removeCreatedLevelsScreen();
+        //that.showMainMenu();
 
         //play level editor music
         levelEditorSong.addEventListener('ended', function() {
@@ -145,14 +256,25 @@ var Menu = (function() {
           }, false);
           levelEditorSong.play();
       };
+        
+        this.signinScreen = function(levelMap) {
+          backToMenuBtn.onclick = that.showMainMenu;
+          //view.style(signinScreen2, { display: 'block' });
+          view.style(backToMenuBtn, { display: 'block' });
   
+          that.hideMainMenu();
+
+        };
+        
       this.startCreatedLevels = function() {
-        view.style(backToMenuBtn, { display: 'block' });
-  
-        createdLevels.init();
-        that.hideMainMenu();
-        playerGame.removeGameScreen();
-        editor.removeEditorScreen();
+          backToMenuBtn.onclick = that.showMainMenu;
+        //view.style(startCreatedLevels, { display: 'block' });
+          view.style(backToMenuBtn, { display: 'block' });
+          
+          createdLevels.init();
+          playerGame.removeGameScreen();
+          editor.removeEditorScreen();
+          that.hideMainMenu();        
       };
   
       this.backToMenu = function() {
@@ -177,7 +299,15 @@ var Menu = (function() {
       };
   
       this.showMainMenu = function() {
+        view.style(backToMenuBtn, { display: 'none' });
         view.style(startScreen, { display: 'block' });
+        view.style(signinScreen, { display: 'none' });
+        view.style(signupScreen, { display: 'none' });
+        createdLevels.removeCreatedLevelsScreen();
+        editor.removeEditorScreen();
+        playerGame.removeGameScreen();
+        level2Song.pause();
+        levelEditorSong.pause();
         
       };
     }

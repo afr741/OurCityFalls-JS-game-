@@ -464,11 +464,11 @@ function Main() {
   
         if (element.type == 2) {
           //Coin Box
-          /*score.coinScore++;
+          score.coinScore++;
           score.totalScore += 100;
   
           score.updateCoinScore();
-          score.updateTotalScore();*/
+          score.updateTotalScore();
           map[row][column] = 0; //sets to useless box after coin appears
   
           //sound when coin block is hit

@@ -5,11 +5,20 @@
   
   .mainMenu {
     width: 1280px;
+    height: 480px;
+    margin: 0 auto;
+    border: 1px solid black;
+    background: url('../images/mainMenu.png');
+    position: relative;
+  }
+  .signin-wrapper{
+    width: 1280px;
     height: 530px;
     margin: 0 auto;
     border: 1px solid black;
     background: url('../images/mainMenu.png');
     position: relative;
+
   }
   
   .levelEditorMenu {
@@ -32,7 +41,36 @@
     display: none;
     margin: 0 auto;
   }
-  
+  .signinScreen{
+    width: 1280px;
+    height: 480px;
+    border: 1px solid black;
+    border-top: none;
+    background: url('../images/signinScreen.png');
+    display: none;
+    margin: 0 auto;
+
+  }
+  .signupScreen{
+    width: 1280px;
+    height: 480px;
+    border: 1px solid black;
+    border-top: none;
+    background: url('../images/signupScreen.png');
+    display: none;
+    margin: 0 auto;
+
+  }
+  .forgotScreen{
+    width: 1280px;
+    height: 480px;
+    border: 1px solid black;
+    border-top: none;
+    background: url('../images/forgotPassScreen.png');
+    display: none;
+    margin: 0 auto;
+
+  }
   .hudWrapper {
     padding-left: 40px;
     width: 1240px;
@@ -98,7 +136,92 @@
     height: 31px;
     background: url('../images/elements.png') 0 0;
   }
-  
+
+  .formClass1 {
+    /* width: 300px; */
+    height: 100px;
+    text-align:left;
+  }
+  .formClass2 {
+    /* width: 300px; */
+    height: 100px;
+    text-align:left;
+  }
+
+  .inp1 {
+    position: fixed;
+    margin-top: 180px;
+    margin-left: 250px; 
+    font-family: monospace;
+    padding: 10px;
+    font-size: 24px;
+    border-radius: 4px;
+    /* width: 10px; */
+    border: 1px solid #d8d8d8;
+    background-color: white; 
+  }
+  .inp2 {
+    position: fixed;
+    margin-top: 240px;
+    margin-left: 250px; 
+    font-family: monospace;
+    padding: 10px;
+    font-size: 24px;
+    border-radius: 4px;
+    /* width: 10px; */
+    border: 1px solid #d8d8d8;
+    background-color: white; 
+  }
+
+  .inp3 {
+    position: fixed;
+    margin-top: 180px;
+    margin-left: 250px; 
+    font-family: monospace;
+    padding: 10px;
+    font-size: 24px;
+    border-radius: 4px;
+    /* width: 10px; */
+    border: 1px solid #d8d8d8;
+    background-color: white; 
+  }
+  .inp4 {
+    position: fixed;
+    margin-top: 240px;
+    margin-left: 250px; 
+    font-family: monospace;
+    padding: 10px;
+    font-size: 24px;
+    border-radius: 4px;
+    /* width: 10px; */
+    border: 1px solid #d8d8d8;
+    background-color: white; 
+  }
+
+  .inp5 {
+    position: fixed;
+    margin-top: 180px;
+    margin-left: 800px; 
+    font-family: monospace;
+    padding: 10px;
+    font-size: 24px;
+    border-radius: 4px;
+    /* width: 10px; */
+    border: 1px solid #d8d8d8;
+    background-color: white; 
+  }
+  .inp6 {
+    position: fixed;
+    margin-top: 240px;
+    margin-left: 800px; 
+    font-family: monospace;
+    padding: 10px;
+    font-size: 24px;
+    border-radius: 4px;
+    /* width: 10px; */
+    border: 1px solid #d8d8d8;
+    background-color: white; 
+  }
   .coin-box {
     width: 31px;
     height: 31px;
@@ -406,3 +529,98 @@
   .fb-comments {
     margin: 0 auto;
   }
+  .user-name1 {
+    margin-top: 190px;
+    margin-left: 65px;
+    width: 150px;
+    height: 50px;
+    margin: left;
+    background: url('../images/userName-tag.png');
+    position: fixed;
+
+  }
+  .user-name2 {
+    margin-top: 190px;
+    margin-left: 90px;
+    width: 150px;
+    height: 50px;
+    margin: left;
+    background: url('../images/userName-tag.png');
+    position: fixed;
+
+  }
+  .E-Add {
+    margin-top: 245px;
+    margin-left: 90px;
+    width: 150px;
+    height: 50px;
+    margin: left;
+    background: url('../images/E-address.png');
+    position: fixed;
+
+  }
+  .password {
+    margin-top: 245px;
+    margin-left: 70px;
+    width: 150px;
+    height: 50px;
+    margin: left;
+    background: url('../images/password-tag.png');
+    position: fixed;
+
+  }
+  .password1 {
+    margin-top: 185px;
+    margin-left: 640px;
+    width: 150px;
+    height: 50px;
+    margin: left;
+    background: url('../images/password-tag.png');
+    position: fixed;
+
+  }
+
+  .conf-pass {
+    margin-top: 245px;
+    margin-left: 640px;
+    width: 150px;
+    height: 50px;
+    margin: left;
+    background: url('../images/Conf-pass.png');
+    position: fixed;
+
+  }
+
+  .Reg-btn {
+    width: 150px;
+    height: 50px;
+    background: url('../images/Register-btn.png');
+    position: fixed;
+    bottom: 250px;
+    left: 530px;
+    color: #ffffff;
+    border: 1px black;
+    background-color: rgba(56, 12, 12, 0.438);
+  }
+  .submit-btn {
+    width: 150px;
+    height: 50px;
+    background: url('../images/submit-btn.png');
+    position: fixed;
+    bottom: 300px;
+    left: 200px;
+    color: #ffffff;
+    border: 1px black;
+    background-color: rgba(56, 12, 12, 0.438);
+  }
+
+  .forgot-btn {
+    width: 150px;
+    height: 50px;
+    background: url('../images/forgotpass-btn.png');
+    position: fixed;
+    bottom: 300px;
+    left: 400px;
+    border: none;
+  }
+  
