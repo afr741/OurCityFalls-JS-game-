@@ -1,17 +1,14 @@
-//Main Class of Level Editor
 
 function Editor() {
-    var view = View.getInstance();
+    var gameDivs = GameDivs.getInstance();
     var mainWrapper;
-  
     var gameWorld;
     var viewPort;
-  
-    var grid;
-    var elementwrapper;
+    var editorGrid;
+    var elementWrapper; //holds images of elements in inventory
   
     var map;
-    var maxWidth;
+    var levelWidth;
     var height = 480;
     var tileSize = 32;
     var scrollMargin = 0;
@@ -21,53 +18,53 @@ function Editor() {
     var that = this;
   
     this.init = function() {
-      mainWrapper = view.getMainWrapper();
-      viewPort = view.create('div');
+      mainWrapper = gameDivs.getMainWrapper();
+      viewPort = gameDivs.create('div');
   
-      view.addClass(viewPort, 'levelEditorMenu');
-      view.style(viewPort, { display: 'block' });
-      view.append(mainWrapper, viewPort);
+      gameDivs.addClass(viewPort, 'levelEditorMenu');
+      gameDivs.style(viewPort, { display: 'block' });
+      gameDivs.append(mainWrapper, viewPort);
   
       that.createLevelEditor();
-      that.drawGrid(3840); //draws grid of size 3840px by default at start
+      that.drawEditorGrid(3840); //draws grid of size 3840px by default at start
       that.showElements();
     };
   
     this.createLevelEditor = function() {
-      var rightArrow = view.create('div');
-      var leftArrow = view.create('div');
-      gameWorld = view.create('div');
+      var rightArrow = gameDivs.create('div');
+      var leftArrow = gameDivs.create('div');
+      gameWorld = gameDivs.create('div');
   
-      view.style(gameWorld, { width: 6400 + 'px' });
-      view.style(gameWorld, { height: height + 'px' });
+      gameDivs.style(gameWorld, { width: 6400 + 'px' });
+      gameDivs.style(gameWorld, { height: height + 'px' });
   
-      view.addClass(rightArrow, 'right-arrow');
-      view.addClass(leftArrow, 'left-arrow');
+      gameDivs.addClass(rightArrow, 'right-arrow');
+      gameDivs.addClass(leftArrow, 'left-arrow');
   
-      view.append(viewPort, rightArrow);
-      view.append(viewPort, leftArrow);
-      view.append(viewPort, gameWorld);
+      gameDivs.append(viewPort, rightArrow);
+      gameDivs.append(viewPort, leftArrow);
+      gameDivs.append(viewPort, gameWorld);
   
-      rightArrow.addEventListener('click', that.rightScroll);
-      leftArrow.addEventListener('click', that.leftScroll);
+      rightArrow.addEventListener('click', that.screenRight);
+      leftArrow.addEventListener('click', that.screenLeft);
     };
   
-    this.drawGrid = function(width) {
-      maxWidth = width;
-      grid = view.create('table');
+    this.drawEditorGrid = function(width) {
+      levelWidth = width;
+      editorGrid = gameDivs.create('table');
   
       var row = height / tileSize;
-      var column = maxWidth / tileSize;
+      var column = levelWidth / tileSize;
   
       var mousedown = false;
       var selected = false;
   
       for (i = 1; i <= row; i++) {
-        var tr = view.create('tr');
+        var tr = gameDivs.create('tr');
         for (j = 1; j <= column; j++) {
-          var td = view.create('td');
+          var td = gameDivs.create('td');
   
-          view.addClass(td, 'cell');
+          gameDivs.addClass(td, 'cell');
   
           td.addEventListener('mousedown', function(e) {
             e.preventDefault(); //to stop the mouse pointer to change
@@ -76,7 +73,7 @@ function Editor() {
           td.onmousedown = (function(i, j) {
             return function() {
               selectedElement.push(this);
-              view.addClass(this, 'active');
+              gameDivs.addClass(this, 'active');
               mousedown = true;
             };
           })(i, j);
@@ -85,7 +82,7 @@ function Editor() {
             return function() {
               if (mousedown) {
                 selectedElement.push(this);
-                view.addClass(this, 'active');
+                gameDivs.addClass(this, 'active');
               }
             };
           })(i, j);
@@ -94,25 +91,25 @@ function Editor() {
             mousedown = false;
           };
   
-          view.append(tr, td);
+          gameDivs.append(tr, td);
         }
   
-        view.append(grid, tr);
+        gameDivs.append(editorGrid, tr);
   
-        grid.onmouseleave = function() {
+        editorGrid.onmouseleave = function() {
           //if mouse hovers over the editor screen
           mousedown = false;
         };
       }
   
-      view.append(gameWorld, grid);
+      gameDivs.append(gameWorld, editorGrid);
     };
   
     this.showElements = function() {
-      elementWrapper = view.create('div');
+      elementWrapper = gameDivs.create('div');
   
-      view.addClass(elementWrapper, 'element-wrapper');
-      view.append(mainWrapper, elementWrapper);
+      gameDivs.addClass(elementWrapper, 'element-wrapper');
+      gameDivs.append(mainWrapper, elementWrapper);
   
       var elements = [
         'cell',
@@ -131,19 +128,19 @@ function Editor() {
       ];
       var element;
   
-      var saveMap = view.create('button');
-      var clearMap = view.create('button');
-      var lvlSize = view.create('div');
-      var gridSmallBtn = view.create('button');
-      var gridMediumBtn = view.create('button');
-      var gridLargeBtn = view.create('button');
+      var saveLevel = gameDivs.create('button');
+      var clearMap = gameDivs.create('button');
+      var lvlSize = gameDivs.create('div');
+      var editorGridSmallBtn = gameDivs.create('button');
+      var editorGridMediumBtn = gameDivs.create('button');
+      var editorGridLargeBtn = gameDivs.create('button');
   
       //for every element in the 'elements' array, it creates a div and sets the class name
       for (i = 0; i < elements.length; i++) {
-        element = view.create('div');
+        element = gameDivs.create('div');
   
-        view.addClass(element, elements[i]);
-        view.append(elementWrapper, element);
+        gameDivs.addClass(element, elements[i]);
+        gameDivs.append(elementWrapper, element);
   
         element.onclick = (function(i) {
           return function() {
@@ -152,40 +149,40 @@ function Editor() {
         })(i);
       }
   
-      view.addClass(lvlSize, 'lvl-size');
-      view.addClass(gridSmallBtn, 'grid-small-btn');
-      view.addClass(gridMediumBtn, 'grid-medium-btn');
-      view.addClass(gridLargeBtn, 'grid-large-btn');
-      view.addClass(saveMap, 'save-map-btn');
-      view.addClass(clearMap, 'clear-map-btn');
-      view.style(elementWrapper, { display: 'block' });
-      view.append(elementWrapper, lvlSize);
-      view.append(elementWrapper, gridSmallBtn);
-      view.append(elementWrapper, gridMediumBtn);
-      view.append(elementWrapper, gridLargeBtn);
-      view.append(elementWrapper, clearMap);
-      view.append(elementWrapper, saveMap);
+      gameDivs.addClass(lvlSize, 'lvl-size');
+      gameDivs.addClass(editorGridSmallBtn, 'grid-small-btn');
+      gameDivs.addClass(editorGridMediumBtn, 'grid-medium-btn');
+      gameDivs.addClass(editorGridLargeBtn, 'grid-large-btn');
+      gameDivs.addClass(saveLevel, 'save-map-btn');
+      gameDivs.addClass(clearMap, 'clear-map-btn');
+      gameDivs.style(elementWrapper, { display: 'block' });
+      gameDivs.append(elementWrapper, lvlSize);
+      gameDivs.append(elementWrapper, editorGridSmallBtn);
+      gameDivs.append(elementWrapper, editorGridMediumBtn);
+      gameDivs.append(elementWrapper, editorGridLargeBtn);
+      gameDivs.append(elementWrapper, clearMap);
+      gameDivs.append(elementWrapper, saveLevel);
   
-      saveMap.addEventListener('click', that.saveMap);
+      saveLevel.addEventListener('click', that.saveLevel);
       clearMap.addEventListener('click', that.resetEditor);
-      gridSmallBtn.addEventListener('click', that.gridSmall);
-      gridMediumBtn.addEventListener('click', that.gridMedium);
-      gridLargeBtn.addEventListener('click', that.gridLarge);
+      editorGridSmallBtn.addEventListener('click', that.editorGridSmall);
+      editorGridMediumBtn.addEventListener('click', that.editorGridMedium);
+      editorGridLargeBtn.addEventListener('click', that.editorGridLarge);
     };
   
-    that.gridSmall = function() {
-      view.remove(gameWorld, grid);
-      that.drawGrid(1280); //small grid size
+    that.editorGridSmall = function() {
+      gameDivs.remove(gameWorld, editorGrid);
+      that.drawEditorGrid(1280); //small grid size
     };
   
-    that.gridMedium = function() {
-      view.remove(gameWorld, grid);
-      that.drawGrid(3840); //medium grid size
+    that.editorGridMedium = function() {
+      gameDivs.remove(gameWorld, editorGrid);
+      that.drawEditorGrid(3840); //medium grid size
     };
   
-    that.gridLarge = function() {
-      view.remove(gameWorld, grid);
-      that.drawGrid(6400); //large grid size
+    that.editorGridLarge = function() {
+      gameDivs.remove(gameWorld, editorGrid);
+      that.drawEditorGrid(6400); //large grid size
     };
   
     this.drawElement = function(element) {
@@ -196,24 +193,24 @@ function Editor() {
       */
   
       for (var i = 0; i < selectedElement.length; i++) {
-        view.addClass(selectedElement[i], element);
+        gameDivs.addClass(selectedElement[i], element);
       }
   
       selectedElement = [];
     };
   
-    that.generateMap = function() {
-      var newMap = [];
-      var gridRows = grid.getElementsByTagName('tr');
+    that.createLevel = function() {
+      var newLevel = [];
+      var editorGridRows = editorGrid.getElementsByTagName('tr');
   
-      //loops throught the table cells and checks for the class-name, puts the value according to its className;
-      for (var i = 0; i < gridRows.length; i++) {
+      //loops throught the table cells and checks for the class name, puts the value according to its class name;
+      for (var i = 0; i < editorGridRows.length; i++) {
         var columns = [];
-        var gridColumns = gridRows[i].getElementsByTagName('td');
-        for (var j = 0; j < gridColumns.length; j++) {
+        var editorGridColumns = editorGridRows[i].getElementsByTagName('td');
+        for (var j = 0; j < editorGridColumns.length; j++) {
           var value;
   
-          switch (gridColumns[j].className) {
+          switch (editorGridColumns[j].className) {
             case 'platform':
               value = 1;
               break;
@@ -268,16 +265,16 @@ function Editor() {
           }
           columns.push(value);
         }
-        newMap.push(columns);
+        newLevel.push(columns);
       }
-      map = newMap;
+      map = newLevel;
     };
   
-    this.saveMap = function() {
+    this.saveLevel = function() {
       var storage = new Storage();
       var levelCounter = storage.getItem('levelCounter') || 0;
   
-      that.generateMap();
+      that.createLevel();
   
       levelCounter++;
   
@@ -291,50 +288,50 @@ function Editor() {
       storage.setItem(levelName, map);
       storage.setItem('levelCounter', levelCounter);
   
-      console.log(storage.getItem(levelName)); //for copying the generated map if required
+      console.log(storage.getItem(levelName)); //so that it is possible to copy the JSON map
     };
   
-    this.rightScroll = function() {
-      if (scrollMargin > -(maxWidth - 1280)) {
+    this.screenRight = function() {
+      if (scrollMargin > -(levelWidth - 1280)) {
         scrollMargin += -160;
-        view.style(gameWorld, { 'margin-left': scrollMargin + 'px' });
+        gameDivs.style(gameWorld, { 'margin-left': scrollMargin + 'px' });
       }
     };
   
-    this.leftScroll = function() {
+    this.screenLeft = function() {
       if (scrollMargin != 0) {
         scrollMargin += 160;
-        view.style(gameWorld, { 'margin-left': scrollMargin + 'px' });
+        gameDivs.style(gameWorld, { 'margin-left': scrollMargin + 'px' });
       }
     };
   
     this.resetEditor = function() {
-      var gridRows = grid.getElementsByTagName('tr');
-      for (var i = 0; i < gridRows.length; i++) {
-        var gridColumns = gridRows[i].getElementsByTagName('td');
+      var editorGridRows = editorGrid.getElementsByTagName('tr');
+      for (var i = 0; i < editorGridRows.length; i++) {
+        var editorGridColumns = editorGridRows[i].getElementsByTagName('td');
   
-        for (var j = 0; j < gridColumns.length; j++) {
-          view.addClass(gridColumns[j], 'cell');
+        for (var j = 0; j < editorGridColumns.length; j++) {
+          gameDivs.addClass(editorGridColumns[j], 'cell');
         }
       }
   
       selectedElement = [];
       scrollMargin = 0;
-      view.style(gameWorld, { 'margin-left': scrollMargin + 'px' });
+      gameDivs.style(gameWorld, { 'margin-left': scrollMargin + 'px' });
     };
   
     this.removeEditorScreen = function() {
       if (viewPort) {
         that.resetEditor();
-        view.style(viewPort, { display: 'none' });
-        view.style(elementWrapper, { display: 'none' });
+        gameDivs.style(viewPort, { display: 'none' });
+        gameDivs.style(elementWrapper, { display: 'none' });
       }
     };
   
     this.showEditorScreen = function() {
       if (viewPort) {
-        view.style(viewPort, { display: 'block' });
-        view.style(elementWrapper, { display: 'block' });
+        gameDivs.style(viewPort, { display: 'block' });
+        gameDivs.style(elementWrapper, { display: 'block' });
       }
     };
   }
