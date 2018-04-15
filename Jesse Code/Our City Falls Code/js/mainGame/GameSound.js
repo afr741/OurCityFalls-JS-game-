@@ -1,5 +1,5 @@
 function GameSound() {
-    var coin;
+    var brickHit;
     var powerUpAppear;
     var powerUp;
     var playerDie;
@@ -13,7 +13,7 @@ function GameSound() {
     var that = this;
   
     this.init = function() {
-      coin = new Audio('sounds/Hit_01.wav');
+      brickHit = new Audio('sounds/Hit_01.wav');
       powerUpAppear = new Audio('sounds/Pickup_03.wav');
       powerUp = new Audio('sounds/Pickup_04.wav');
       playerDie = new Audio('sounds/Jingle_Lose_00.wav');
@@ -32,10 +32,10 @@ function GameSound() {
   
     this.play = function(element) {
 
-      if (element == 'coin') {
-        coin.pause();
-        coin.currentTime = 0;
-        coin.play();
+      if (element == 'brickHit') {
+        brickHit.pause();
+        brickHit.currentTime = 0;
+        brickHit.play();
       } else if (element == 'powerUpAppear') {
         powerUpAppear.pause();
         powerUpAppear.currentTime = 0;
