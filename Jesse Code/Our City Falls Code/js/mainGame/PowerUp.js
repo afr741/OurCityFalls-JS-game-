@@ -9,7 +9,7 @@ function PowerUp() {
     this.y;
     this.xVelocity = 0;
     this.yVelocity = 0;
-    this.grounded = false;
+    this.onGround = false;
     this.spriteX;
     this.spriteY = 0;
     this.width = 32;
@@ -46,7 +46,7 @@ function PowerUp() {
       if (that.type == 30) {
         var gravity = 0.2;
   
-        if (that.grounded) {
+        if (that.onGround) {
           that.yVelocity = 0;
         }
   
@@ -59,7 +59,7 @@ function PowerUp() {
       if(that.type == 31){
         var gravity = 0.2;
 
-        if(that.grounded){
+        if(that.onGround){
           that.yVelocity = 0;
         }
 
@@ -71,7 +71,7 @@ function PowerUp() {
       if(that.type == 32){
         var gravity = 0.2;
 
-        if (that.grounded) {
+        if (that.onGround) {
           that.yVelocity = 0;
         }
 
