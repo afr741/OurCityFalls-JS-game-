@@ -1,5 +1,5 @@
 function CreatedLevels() {
-    var view = View.getInstance();
+    var gameDivs = GameDivs.getInstance();
   
     var storage;
     var levelsWrapper;
@@ -7,15 +7,15 @@ function CreatedLevels() {
     var that = this;
   
     this.init = function() {
-      var mainWrapper = view.getMainWrapper();
-      var deleteAllBtn = view.create('button');
-      levelsWrapper = view.create('div');
+      var mainWrapper = gameDivs.getMainWrapper();
+      var deleteAllBtn = gameDivs.create('button');
+      levelsWrapper = gameDivs.create('div');
   
-      view.addClass(levelsWrapper, 'levels-wrapper');
-      view.addClass(deleteAllBtn, 'delete-all-btn');
-      view.style(levelsWrapper, { display: 'block' });
-      view.append(levelsWrapper, deleteAllBtn);
-      view.append(mainWrapper, levelsWrapper);
+      gameDivs.addClass(levelsWrapper, 'levels-wrapper');
+      gameDivs.addClass(deleteAllBtn, 'delete-all-btn');
+      gameDivs.style(levelsWrapper, { display: 'block' });
+      gameDivs.append(levelsWrapper, deleteAllBtn);
+      gameDivs.append(mainWrapper, levelsWrapper);
   
       deleteAllBtn.onclick = that.deleteAllMaps;
   
@@ -29,12 +29,12 @@ function CreatedLevels() {
   
       if (totalStoredLevels != 0) {
         for (var i = 1; i < totalStoredLevels; i++) {
-          var levelButton = view.create('div');
+          var levelButton = gameDivs.create('div');
           var levelName = storage.getItemName(i);
   
-          view.setHTML(levelButton, levelName);
-          view.addClass(levelButton, 'level-btn');
-          view.append(levelsWrapper, levelButton);
+          gameDivs.setHTML(levelButton, levelName);
+          gameDivs.addClass(levelButton, 'level-btn');
+          gameDivs.append(levelsWrapper, levelButton);
   
           levelButton.onclick = (function(i) {
             return function() {
@@ -44,9 +44,9 @@ function CreatedLevels() {
           })(i);
         }
       } else {
-        var noMapsMessage = view.create('div');
+        var noMapsMessage = gameDivs.create('div');
   
-        view.addClass(noMapsMessage, 'no-maps');
+        gameDivs.addClass(noMapsMessage, 'no-maps');
       }
     };
   
@@ -68,17 +68,17 @@ function CreatedLevels() {
   
     this.showCreatedLevelsScreen = function() {
       if (levelsWrapper) {
-        view.style(levelsWrapper, { display: 'block' });
+        gameDivs.style(levelsWrapper, { display: 'block' });
       }
     };
   
     this.removeCreatedLevelsScreen = function() {
       if (levelsWrapper) {
-        view.style(levelsWrapper, { display: 'none' });
+        gameDivs.style(levelsWrapper, { display: 'none' });
   
         while (levelsWrapper.hasChildNodes()) {
           //removes all the created levels on screen, so that it can be initiated again showing new levels that user creates
-          view.remove(levelsWrapper, levelsWrapper.lastChild);
+          gameDivs.remove(levelsWrapper, levelsWrapper.lastChild);
         }
       }
     };
