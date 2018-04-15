@@ -9,9 +9,9 @@ function Player() {
     this.speed = 3;
     this.xVelocity = 0;
     this.yVelocity = 0;
-    this.jumping = false;
-    this.grounded = false;
-    this.invulnerable = false;  // flag for invincibility frames
+    this.isJumping = false;
+    this.onGround = false;
+    this.isInvincible = false;  // flag for invincibility frames
     this.spriteX = 0; // sprite x
     this.spriteY = 4; // sprite y
     this.frame = 0;
@@ -36,8 +36,8 @@ function Player() {
         that.height = 60;
   
         //armored player sprite position
-        if (that.invulnerable) {
-          that.spriteY = 276; //if invulnerable, show red player
+        if (that.isInvincible) {
+          that.spriteY = 276; //if isInvincible, show red player
         } else {
           that.spriteY = 90;
         }
@@ -45,8 +45,8 @@ function Player() {
         that.height = 44;
   
         //normal player sprite
-        if (that.invulnerable) {
-          that.spriteY = 222; //if invulnerable, show red player
+        if (that.isInvincible) {
+          that.spriteY = 222; //if isInvincible, show red player
         } else {
           that.spriteY = 4;
         }
