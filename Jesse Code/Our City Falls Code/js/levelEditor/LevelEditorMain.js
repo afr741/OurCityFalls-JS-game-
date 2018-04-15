@@ -118,10 +118,10 @@ function LevelEditorMain() {
         'useless-box',
         'flag',
         'flag-pole',
-        'pipe-left',
-        'pipe-right',
-        'pipe-top-left',
-        'pipe-top-right',
+        'tree-left',
+        'tree-right',
+        'tree-top-left',
+        'tree-top-right',
         'spikes',
         'zombie'
       ];
@@ -238,19 +238,19 @@ function LevelEditorMain() {
               value = 6;
               break;
   
-            case 'pipe-left':
+            case 'tree-left':
               value = 7;
               break;
   
-            case 'pipe-right':
+            case 'tree-right':
               value = 8;
               break;
   
-            case 'pipe-top-left':
+            case 'tree-top-left':
               value = 9;
               break;
   
-            case 'pipe-top-right':
+            case 'tree-top-right':
               value = 10;
               break;
 
