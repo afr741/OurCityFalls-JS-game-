@@ -1,4 +1,4 @@
-//for storing and retrieving from localStorage
+//saving & loading to/from local storage
 
 function Storage() {
     this.getItem = function(itemName) {
