@@ -1,8 +1,8 @@
 function Enemy() {
     var gameUI = GameUI.getInstance();
   
-    var tickCounter = 0; //for animating zombie
-    var maxTick = 10; //max number for ticks to show enemy sprite
+    var animationTick = 0; //for animating zombie
+    var tickLimit = 10; //max number for ticks to show enemy sprite
   
     var element = new Image();
     element.src = 'images/enemies.png';
@@ -11,7 +11,7 @@ function Enemy() {
     this.y;
     this.xVelocity = .5;
     this.yVelocity = 0;
-    this.grounded = false;
+    this.onGround = false;
     this.type;
     this.state;
   
@@ -37,19 +37,19 @@ function Enemy() {
     this.update = function() {
       var gravity = 0.2;
   
-      if (that.grounded) {
+      if (that.onGround) {
         that.yVelocity = 0;
       }
   
       if (that.state == 'dead') {
         that.frame = 2; //squashed zombie
   
-        tickCounter++;
-        if (tickCounter >= 60) {
+        animationTick++;
+        if (animationTick >= 60) {
           that.frame = 4;
         }
       } else if (that.state == 'deadFromBullet') {
-        //falling zombie
+        //zombie falling off screen
         that.frame = 3;
         that.yVelocity += gravity;
         that.y += that.yVelocity;
@@ -60,10 +60,10 @@ function Enemy() {
         that.y += that.yVelocity;
   
         //for animating
-        tickCounter += 1;
+        animationTick += 1;
   
-        if (tickCounter > maxTick) {
-          tickCounter = 0;
+        if (animationTick > tickLimit) {
+          animationTick = 0;
           if (that.frame == 0) {
             that.frame = 1;
           } else {
