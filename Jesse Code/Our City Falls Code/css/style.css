@@ -247,25 +247,25 @@
   background: url('../images/elements.png') -160px 0;
 }
 
-.pipe-left {
+.tree-left {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -192px 0;
 }
 
-.pipe-right {
+.tree-right {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -224px 0;
 }
 
-.pipe-top-left {
+.tree-top-left {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -256px 0;
 }
 
-.pipe-top-right {
+.tree-top-right {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -288px 0;
