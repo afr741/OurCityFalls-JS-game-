@@ -37,8 +37,8 @@ function LevelEditorMain() {
       gameDivs.style(gameWorld, { width: 6400 + 'px' });
       gameDivs.style(gameWorld, { height: height + 'px' });
   
-      gameDivs.addClass(rightArrow, 'right-arrow');
-      gameDivs.addClass(leftArrow, 'left-arrow');
+      gameDivs.addClass(rightArrow, 'arrow-screen-right');
+      gameDivs.addClass(leftArrow, 'arrow-screen-left');
   
       gameDivs.append(viewPort, rightArrow);
       gameDivs.append(viewPort, leftArrow);
@@ -113,16 +113,15 @@ function LevelEditorMain() {
       var elements = [
         'cell',
         'platform',
-        'coin-box',
-        'power-up-box',
-        'useless-box',
-        'flag',
-        'flag-pole',
+        'breakable-brick',
+        'powerup-brick',
+        'unbreakable-brick',
+        'map-piece',
+        'spikes',
         'tree-left',
         'tree-right',
         'tree-top-left',
         'tree-top-right',
-        'spikes',
         'zombie'
       ];
       var element;
@@ -130,9 +129,9 @@ function LevelEditorMain() {
       var saveLevel = gameDivs.create('button');
       var clearMap = gameDivs.create('button');
       var lvlSize = gameDivs.create('div');
-      var editorGridSmallBtn = gameDivs.create('button');
-      var editorGridMediumBtn = gameDivs.create('button');
-      var editorGridLargeBtn = gameDivs.create('button');
+      var editorGridSmallButton = gameDivs.create('button');
+      var editorGridMediumButton = gameDivs.create('button');
+      var editorGridLargeButton = gameDivs.create('button');
   
       //for every element in the 'elements' array, it creates a div and sets the class name
       for (i = 0; i < elements.length; i++) {
@@ -148,25 +147,25 @@ function LevelEditorMain() {
         })(i);
       }
   
-      gameDivs.addClass(lvlSize, 'lvl-size');
-      gameDivs.addClass(editorGridSmallBtn, 'grid-small-btn');
-      gameDivs.addClass(editorGridMediumBtn, 'grid-medium-btn');
-      gameDivs.addClass(editorGridLargeBtn, 'grid-large-btn');
-      gameDivs.addClass(saveLevel, 'save-map-btn');
-      gameDivs.addClass(clearMap, 'clear-map-btn');
+      gameDivs.addClass(lvlSize, 'level-size');
+      gameDivs.addClass(editorGridSmallButton, 'level-small-button');
+      gameDivs.addClass(editorGridMediumButton, 'level-medium-button');
+      gameDivs.addClass(editorGridLargeButton, 'level-large-button');
+      gameDivs.addClass(saveLevel, 'save-level-button');
+      gameDivs.addClass(clearMap, 'clear-level-button');
       gameDivs.style(elementWrapper, { display: 'block' });
       gameDivs.append(elementWrapper, lvlSize);
-      gameDivs.append(elementWrapper, editorGridSmallBtn);
-      gameDivs.append(elementWrapper, editorGridMediumBtn);
-      gameDivs.append(elementWrapper, editorGridLargeBtn);
+      gameDivs.append(elementWrapper, editorGridSmallButton);
+      gameDivs.append(elementWrapper, editorGridMediumButton);
+      gameDivs.append(elementWrapper, editorGridLargeButton);
       gameDivs.append(elementWrapper, clearMap);
       gameDivs.append(elementWrapper, saveLevel);
   
       saveLevel.addEventListener('click', that.saveLevel);
       clearMap.addEventListener('click', that.resetEditor);
-      editorGridSmallBtn.addEventListener('click', that.editorGridSmall);
-      editorGridMediumBtn.addEventListener('click', that.editorGridMedium);
-      editorGridLargeBtn.addEventListener('click', that.editorGridLarge);
+      editorGridSmallButton.addEventListener('click', that.editorGridSmall);
+      editorGridMediumButton.addEventListener('click', that.editorGridMedium);
+      editorGridLargeButton.addEventListener('click', that.editorGridLarge);
     };
   
     that.editorGridSmall = function() {
@@ -214,15 +213,15 @@ function LevelEditorMain() {
               value = 1;
               break;
   
-            case 'coin-box':
+            case 'breakable-brick':
               value = 2;
               break;
   
-            case 'power-up-box':
+            case 'powerup-brick':
               value = 3;
               break;
   
-            case 'useless-box':
+            case 'unbreakable-brick':
               value = 4;
               break;
   
@@ -230,11 +229,11 @@ function LevelEditorMain() {
               value = 20;
               break;
   
-            case 'flag-pole':
+            case 'map-piece':
               value = 5;
               break;
   
-            case 'flag':
+            case 'spikes':
               value = 6;
               break;
   

@@ -363,7 +363,7 @@ function Main() {
       }
 
 
-      /*if(element.type == 11){
+      /*if(element.type == 6){
         //spikes
         if (player.type == 'armor') {
           player.type = 'normal';

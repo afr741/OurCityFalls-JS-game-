@@ -217,31 +217,31 @@
   border: 1px solid #d8d8d8;
   background-color: white; 
 }
-.coin-box {
+.breakable-brick {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -32px 0;
 }
 
-.power-up-box {
+.powerup-brick {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -64px 0;
 }
 
-.useless-box {
+.unbreakable-brick {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -96px 0;
 }
 
-.flag-pole {
+.map-piece {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -128px 0;
 }
 
-.flag {
+.spikes {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -160px 0;
@@ -271,11 +271,11 @@
   background: url('../images/elements.png') -288px 0;
 }
 
-.spikes{
+/*.spikes{
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -320px 0;
-}
+}*/
 
 .zombie {
   width: 31px;
@@ -289,7 +289,7 @@
   background: url('../images/enemies2.png') 0 0;
 }
 
-.right-arrow {
+.arrow-screen-right {
   width: 60px;
   height: 60px;
   top: 215px;
@@ -298,7 +298,7 @@
   position: absolute;
 }
 
-.left-arrow {
+.arrow-screen-left {
   width: 60px;
   height: 60px;
   top: 215px;
@@ -312,7 +312,7 @@
   float: left;
 }
 
-.lvl-size {
+.level-size {
   clear: both;
   float: left;
   width: 115px;
@@ -321,7 +321,7 @@
   margin-right: 10px;
 }
 
-.grid-small-btn {
+.level-small-button {
   float: left;
   width: 84px;
   height: 38px;
@@ -330,11 +330,11 @@
   margin-right: 10px;
 }
 
-.grid-medium-btn:selected {
+.level-medium-button:selected {
   background: red;
 }
 
-.grid-medium-btn {
+.level-medium-button {
   float: left;
   width: 96px;
   height: 48px;
@@ -343,7 +343,7 @@
   margin-right: 10px;
 }
 
-.grid-large-btn {
+.level-large-button {
   float: left;
   width: 128px;
   height: 32px;
@@ -352,7 +352,7 @@
   margin-right: 10px;
 }
 
-.save-map-btn {
+.save-level-button {
   float: right;
   width: 200px;
   height: 50px;
@@ -362,7 +362,7 @@
   margin-top: -35px;
 }
 
-.clear-map-btn {
+.clear-level-button {
   float: right;
   width: 200px;
   height: 50px;
@@ -384,7 +384,7 @@
   background: url('../images/background0.png');
 }
 
-.start-btn {
+.start-button {
   width: 200px;
   height: 50px;
   color: #ffffff;
@@ -395,7 +395,7 @@
   border: none;
 }
 
-.options-btn{
+.options-button{
   width: 200px;
   height: 50px;
   color: white;
@@ -406,7 +406,7 @@
   border: none;
 }
 
-.profile-btn{
+.profile-button{
   width: 200px;
   height: 50px;
   color: white;
@@ -417,7 +417,7 @@
   border: none;
 }
 
-.editor-btn {
+.editor-button {
   width: 200px;
   height: 50px;
   background: url('../images/editor-btn.png');
@@ -427,7 +427,7 @@
   color: #ffffff;
   border: none;
 }
-.signin-btn {
+.signin-button {
   width: 200px;
   height: 50px;
   background: url('../images/signin-btn.png');
@@ -437,7 +437,7 @@
   color: #ffffff;
   border: none;
 }
-.signup-btn {
+.signup-button {
   width: 200px;
   height: 50px;
   background: url('../images/signup-btn.png');
@@ -448,7 +448,7 @@
   border: none;
 }
 
-.created-btn {
+.created-button {
   width: 200px;
   height: 50px;
   background: url('../images/saved-btn.png');
@@ -459,7 +459,7 @@
   border: none;
 }
 
-.back-btn {
+.back-button {
   width: 200px;
   height: 50px;
   background: url('../images/back-btn.png');
@@ -469,7 +469,7 @@
   display: none;
 }
 
-.level-btn {
+.level-button {
   font-family: fantasy;
   font-size: 25px;
   float: left;
@@ -485,7 +485,7 @@
   background: none;
 }
 
-.delete-all-btn {
+.delete-all-button {
   width: 194px;
   height: 50px;
   background: url('../images/delete-all-btn.png');
@@ -497,7 +497,7 @@
   right: 520px;
 }
 
-.btn-wrapper {
+.button-wrapper {
   width: 1280px;
   height: 100px;
   margin: 0 auto;
@@ -586,7 +586,7 @@
 
 }
 
-.Reg-btn {
+.Reg-button {
   width: 150px;
   height: 50px;
   background: url('../images/Register-btn.png');
@@ -597,7 +597,7 @@
   border: 1px black;
   background-color: rgba(56, 12, 12, 0.438);
 }
-.submit-btn {
+.submit-button {
   width: 150px;
   height: 50px;
   background: url('../images/submit-btn.png');
@@ -609,7 +609,7 @@
   background-color: rgba(56, 12, 12, 0.438);
 }
 
-.forgot-btn {
+.forgot-button {
   width: 150px;
   height: 50px;
   background: url('../images/forgotpass-btn.png');
