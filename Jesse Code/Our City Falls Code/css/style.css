@@ -217,19 +217,19 @@
   border: 1px solid #d8d8d8;
   background-color: white; 
 }
-.coin-box {
+.breakable-brick {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -32px 0;
 }
 
-.power-up-box {
+.powerup-brick {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -64px 0;
 }
 
-.useless-box {
+.unbreakable-brick {
   width: 31px;
   height: 31px;
   background: url('../images/elements.png') -96px 0;
