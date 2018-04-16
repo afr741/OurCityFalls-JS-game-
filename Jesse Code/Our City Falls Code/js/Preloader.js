@@ -43,7 +43,8 @@ function Preloader() {
       34: 'images/signin-btn.png',
       35: 'images/signup-btn.png',
       36: 'images/submit-btn.png',
-      37: 'images/userName-tag.png'
+      37: 'images/userName-tag.png',
+      38: 'images/forgotPassScreen.png'
     };
 
     that.loadImages(imgSrc);

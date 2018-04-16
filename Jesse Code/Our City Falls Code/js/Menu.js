@@ -137,6 +137,8 @@ var Menu = (function() {
       gameDivs.append(mainWrapper, btnWrapper);
       gameDivs.append(mainWrapper, signinScreen);
       gameDivs.append(mainWrapper, signupScreen);
+      gameDivs.append(mainWrapper, forgotPassScreen);
+      gameDivs.append(mainWrapper, optionsScreen);
       gameDivs.append(signinScreen, userName1);
       gameDivs.append(signupScreen, userName2);
       gameDivs.append(signupScreen, eAddress);
@@ -160,6 +162,8 @@ var Menu = (function() {
       editorButton.onclick = that.startEditor;
       signinButton.onclick = that.signinScreen;
       signupButton.onclick = that.signupScreen;
+      forgotButton.onclick = that.forgotPassScreen;
+      optionsButton.onclick = that.optionsScreen;
       createdLevelsButton.onclick = that.startCreatedLevels;
 
       if (that.editorStarted){
@@ -189,6 +193,22 @@ var Menu = (function() {
 
         backToMenuBtn.onclick = that.showMainMenu;
         gameDivs.style(signupScreen, { display: 'block' });
+        gameDivs.style(backToMenuBtn, { display: 'block' });
+      };
+
+      forgotButton.onclick = function() {
+        that.hideMainMenu();
+
+        backToMenuBtn.onclick = that.showMainMenu;
+        gameDivs.style(forgotPassScreen, { display: 'block' });
+        gameDivs.style(backToMenuBtn, { display: 'block' });
+      };
+
+      optionsButton.onclick = function() {
+        that.hideMainMenu();
+
+        backToMenuBtn.onclick = that.showMainMenu;
+        gameDivs.style(optionsScreen, { display: 'block' });
         gameDivs.style(backToMenuBtn, { display: 'block' });
       };
     }
@@ -258,9 +278,15 @@ var Menu = (function() {
         that.hideMainMenu();
       };
 
+      this.forgotPassScreen = function(levelMap) {
+        backToMenuBtn.onclick = that.showMainMenu;
+        gameDivs.style(backToMenuBtn, { display: 'block' });
+
+        that.hideForgotScreen();
+      };
+
       this.optionsScreen = function(levelMap) {
         backToMenuBtn.onclick = that.showMainMenu;
-        //gameDivs.style(signinScreen2, { display: 'block' });
         gameDivs.style(backToMenuBtn, { display: 'block' });
 
         that.hideMainMenu();
@@ -296,6 +322,10 @@ var Menu = (function() {
 
     this.hideMainMenu = function() {
       gameDivs.style(startScreen, { display: 'none' });
+    };
+
+    this.hideForgotScreen = function() {
+      gameDivs.style(forgotPassScreen, { display: 'none' });
     };
 
     this.showMainMenu = function() {

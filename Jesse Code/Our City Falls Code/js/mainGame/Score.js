@@ -52,7 +52,7 @@ function Score() {
       that.updateLifeCount();
     }
 
-    gameDivs.setHTML(coinScoreWrapper, 'Coins: ' + that.coinScore);
+    gameDivs.setHTML(coinScoreWrapper, 'Bricks: ' + that.coinScore);
   };
 
   this.updateTotalScore = function() {
