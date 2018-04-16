@@ -56,6 +56,7 @@ function PowerUp() {
         that.y += that.yVelocity;
       }
 
+      //powerups fall to the ground
       if(that.type == 31){
         var gravity = 0.2;
 
@@ -67,7 +68,7 @@ function PowerUp() {
 
         that.y += that.yVelocity;
       }
-
+      //powerups fall to the ground
       if(that.type == 32){
         var gravity = 0.2;
 
