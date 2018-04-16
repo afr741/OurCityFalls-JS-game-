@@ -14,7 +14,7 @@ function Enemy() {
     this.onGround = false;
     this.type;
     this.state;
-    this.health = 3;
+    this.health = 2;
   
     this.spriteX;
     this.spriteY = 0;
