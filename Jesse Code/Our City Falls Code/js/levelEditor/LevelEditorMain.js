@@ -113,9 +113,9 @@ function LevelEditorMain() {
       var elements = [
         'cell',
         'platform',
-        'coin-box',
-        'power-up-box',
-        'useless-box',
+        'breakable-brick',
+        'powerup-brick',
+        'unbreakable-brick',
         'flag',
         'flag-pole',
         'tree-left',
@@ -214,15 +214,15 @@ function LevelEditorMain() {
               value = 1;
               break;
   
-            case 'coin-box':
+            case 'breakable-brick':
               value = 2;
               break;
   
-            case 'power-up-box':
+            case 'powerup-brick':
               value = 3;
               break;
   
-            case 'useless-box':
+            case 'unbreakable-brick':
               value = 4;
               break;
   
