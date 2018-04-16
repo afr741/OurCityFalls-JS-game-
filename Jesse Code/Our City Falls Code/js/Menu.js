@@ -25,8 +25,8 @@ var Menu = (function() {
     var editorStarted = 0;
     var backToMenuBtn;
     var submitButton;
-    //var forgotButton;
-    //var forgotPassScreen;
+    var forgotButton;
+    var forgotPassScreen;
     //instances
     var playerGame;
     var editor;
@@ -58,7 +58,7 @@ var Menu = (function() {
       startScreen = gameDivs.create('div');
       signinScreen = gameDivs.create('div');
       signupScreen = gameDivs.create('div');
-      //forgotPassScreen = gameDivs.create('div');
+      forgotPassScreen = gameDivs.create('div');
       userName1 = gameDivs.create('div');
       userName2 = gameDivs.create('div');
       pass = gameDivs.create('div');
@@ -74,7 +74,7 @@ var Menu = (function() {
       submitButton = gameDivs.create('button');
       submitButton2 = gameDivs.create('button');
       Reg = gameDivs.create('button');
-      //forgotButton = gameDivs.create('button');
+      forgotButton = gameDivs.create('button');
       optionsButton = gameDivs.create('button');
       profileButton = gameDivs.create('button');
       signupButton = gameDivs.create('button')
@@ -95,7 +95,7 @@ var Menu = (function() {
       gameDivs.addClass(signinScreen, 'signinScreen');
       gameDivs.addClass(btnWrapper, 'button-wrapper');
       gameDivs.addClass(startScreen, 'mainMenu');
-      //gameDivs.addClass(forgotPassScreen, 'forgotScreen');
+      gameDivs.addClass(forgotPassScreen, 'forgotScreen');
       gameDivs.addClass(signupScreen, 'signupScreen');
       gameDivs.addClass(optionsButton, 'options-button');
       gameDivs.addClass(optionsScreen, 'optionsScreen');
@@ -112,7 +112,7 @@ var Menu = (function() {
       gameDivs.addClass(pass1, 'password1');
       gameDivs.addClass(submitButton, 'submit-button');
       gameDivs.addClass(submitButton2, 'submit-button');
-      //gameDivs.addClass(forgotButton, 'forgot-button');
+      gameDivs.addClass(forgotButton, 'forgot-button');
       gameDivs.addClass(confirmPass, 'conf-pass');
       gameDivs.addClass(eAddress, 'E-Add');
       gameDivs.addClass(Reg, 'Reg-button');
@@ -137,8 +137,6 @@ var Menu = (function() {
       gameDivs.append(mainWrapper, btnWrapper);
       gameDivs.append(mainWrapper, signinScreen);
       gameDivs.append(mainWrapper, signupScreen);
-      //gameDivs.append(mainWrapper, forgotPassScreen);
-      gameDivs.append(mainWrapper, optionsScreen);
       gameDivs.append(signinScreen, userName1);
       gameDivs.append(signupScreen, userName2);
       gameDivs.append(signupScreen, eAddress);
@@ -147,7 +145,7 @@ var Menu = (function() {
       gameDivs.append(signupScreen, confirmPass);
       gameDivs.append(signupScreen, Reg);
       gameDivs.append(signinScreen, submitButton);
-      //gameDivs.append(signinScreen, forgotButton);
+      gameDivs.append(signinScreen, forgotButton);
       gameDivs.append(formdiv1, inp1);
       gameDivs.append(formdiv1, inp2);
       gameDivs.append(signinScreen, formdiv1);
@@ -162,8 +160,6 @@ var Menu = (function() {
       editorButton.onclick = that.startEditor;
       signinButton.onclick = that.signinScreen;
       signupButton.onclick = that.signupScreen;
-      // forgotButton.onclick = that.forgotPassScreen;
-      optionsButton.onclick = that.optionsScreen;
       createdLevelsButton.onclick = that.startCreatedLevels;
 
       if (that.editorStarted){
@@ -195,22 +191,6 @@ var Menu = (function() {
         gameDivs.style(signupScreen, { display: 'block' });
         gameDivs.style(backToMenuBtn, { display: 'block' });
       };
-
-      forgotButton.onclick = function() {
-        that.hideMainMenu();
-
-        backToMenuBtn.onclick = that.showMainMenu;
-        gameDivs.style(forgotPassScreen, { display: 'block' });
-        gameDivs.style(backToMenuBtn, { display: 'block' });
-      };
-
-      optionsButton.onclick = function() {
-        that.hideMainMenu();
-
-        backToMenuBtn.onclick = that.showMainMenu;
-        gameDivs.style(optionsScreen, { display: 'block' });
-        gameDivs.style(backToMenuBtn, { display: 'block' });
-      };
     }
 
     this.loadMainGameMap = function() {
@@ -235,7 +215,7 @@ var Menu = (function() {
       //menus are layered on each other, so each must be removed
       that.hideMainMenu();
       editor.removeEditorScreen();
-      createdLevels.removeCreatedLevelsScreen();
+      createdLevels.hideSavedLevelsScreen();
 
       level2Song.addEventListener('ended', function() {
           this.currentTime = 0;
@@ -259,7 +239,7 @@ var Menu = (function() {
 
       that.hideMainMenu();
       playerGame.removeGameScreen();
-      createdLevels.removeCreatedLevelsScreen();
+      createdLevels.hideSavedLevelsScreen();
       //that.showMainMenu();
 
       //play level editor music
@@ -276,20 +256,7 @@ var Menu = (function() {
         gameDivs.style(backToMenuBtn, { display: 'block' });
 
         that.hideMainMenu();
-      };
 
-      this.forgotPassScreen = function(levelMap) {
-        backToMenuBtn.onclick = that.showMainMenu;
-        gameDivs.style(backToMenuBtn, { display: 'block' });
-
-        that.hideForgotScreen();
-      };
-
-      this.optionsScreen = function(levelMap) {
-        backToMenuBtn.onclick = that.showMainMenu;
-        gameDivs.style(backToMenuBtn, { display: 'block' });
-
-        that.hideMainMenu();
       };
       
     this.startCreatedLevels = function() {
@@ -314,7 +281,7 @@ var Menu = (function() {
 
       editor.removeEditorScreen();
 
-      createdLevels.removeCreatedLevelsScreen();
+      createdLevels.hideSavedLevelsScreen();
       that.showMainMenu();
 
       gameDivs.style(backToMenuBtn, { display: 'none' });
@@ -324,16 +291,12 @@ var Menu = (function() {
       gameDivs.style(startScreen, { display: 'none' });
     };
 
-    this.hideForgotScreen = function() {
-      gameDivs.style(forgotPassScreen, { display: 'none' });
-    };
-
     this.showMainMenu = function() {
       gameDivs.style(backToMenuBtn, { display: 'none' });
       gameDivs.style(startScreen, { display: 'block' });
       gameDivs.style(signinScreen, { display: 'none' });
       gameDivs.style(signupScreen, { display: 'none' });
-      createdLevels.removeCreatedLevelsScreen();
+      createdLevels.hideSavedLevelsScreen();
       editor.removeEditorScreen();
       playerGame.removeGameScreen();
       level2Song.pause();
