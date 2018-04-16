@@ -15,6 +15,7 @@ function Player() {
     this.spriteX = 0; // sprite x
     this.spriteY = 4; // sprite y
     this.frame = 0;
+    this.health = 1;
   
     var that = this;
   
