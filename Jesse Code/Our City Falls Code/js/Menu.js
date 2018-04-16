@@ -210,9 +210,9 @@ var Menu = (function() {
       gameDivs.style(backToMenuBtn, { display: 'block' });
 
       playerGame.clearInstances();
-      playerGame.init(levelMap, 1); //initiate level 1 of map
+      playerGame.init(levelMap, 1); //start first level
 
-      //menus are layered on each other, so each must be removed
+      //menus are stacked on each other. Must remove others.
       that.hideMainMenu();
       editor.removeEditorScreen();
       createdLevels.hideSavedLevelsScreen();
@@ -229,7 +229,7 @@ var Menu = (function() {
       gameDivs.style(backToMenuBtn, { display: 'block' });
 
       if (editorStarted == 0) {
-        //instantiate only once, after that just show and hide the editor screen
+        //Initially start the editor. After that we just have to show and hide.
         editor.init();
         editorStarted = 1;
 
@@ -271,8 +271,8 @@ var Menu = (function() {
     };
 
     this.backToMenu = function() {
-      playerGame.pauseGame(); //pause game when the back button is pressed so that the gameloop doesnt run more than once
-      playerGame.clearTimeOut(); //when player dies, a timeout starts for resetting the game. Pressing the back button clears that timeout
+      playerGame.pauseGame(); //when back is clicked, pause the game so that multiple instances don't play over one another
+      playerGame.clearTimeOut(); //back button resets timeout function
       playerGame.removeGameScreen();
       
       //pause music when going back to menu
