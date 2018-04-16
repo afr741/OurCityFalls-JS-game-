@@ -662,6 +662,8 @@ function Main() {
           //if zombie still has health, decrement it.
           if(zombies[i].health != 0){
             zombies[i].health--;
+            zombies[i].xVelocity = zombies[i].xVelocity * 2; //Zombies enter an increasing rage when shot
+            
             gameSound.play('killEnemy');
           }
           //else the zombie has no more health and dies.
