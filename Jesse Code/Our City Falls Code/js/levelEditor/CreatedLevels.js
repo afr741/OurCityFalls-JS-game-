@@ -21,10 +21,10 @@ function CreatedLevels() {
   
       storage = new Storage();
   
-      that.showLevels();
+      that.showSavedLevels();
     };
   
-    this.showLevels = function() {
+    this.showSavedLevels = function() {
       var totalStoredLevels = storage.getLength();
   
       if (totalStoredLevels != 0) {
@@ -39,21 +39,21 @@ function CreatedLevels() {
           levelButton.onclick = (function(i) {
             return function() {
               that.startLevel(i);
-              that.removeCreatedLevelsScreen();
+              that.hideSavedLevelsScreen();
             };
           })(i);
         }
       } else {
-        var noMapsMessage = gameDivs.create('div');
+        var noSavedLevelsMsg = gameDivs.create('div');
   
-        gameDivs.addClass(noMapsMessage, 'no-maps');
+        gameDivs.addClass(noSavedLevelsMsg, 'no-maps');
       }
     };
   
     this.deleteAllMaps = function() {
       storage.clear();
   
-      that.removeCreatedLevelsScreen();
+      that.hideSavedLevelsScreen();
       that.init();
     };
   
@@ -72,12 +72,12 @@ function CreatedLevels() {
       }
     };
   
-    this.removeCreatedLevelsScreen = function() {
+    this.hideSavedLevelsScreen = function() {
       if (levelsWrapper) {
         gameDivs.style(levelsWrapper, { display: 'none' });
   
         while (levelsWrapper.hasChildNodes()) {
-          //removes all the created levels on screen, so that it can be initiated again showing new levels that user creates
+          //remove saved levels so it can be shown again with newly created levels
           gameDivs.remove(levelsWrapper, levelsWrapper.lastChild);
         }
       }
