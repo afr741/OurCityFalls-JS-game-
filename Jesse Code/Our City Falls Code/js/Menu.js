@@ -256,7 +256,14 @@ var Menu = (function() {
         gameDivs.style(backToMenuBtn, { display: 'block' });
 
         that.hideMainMenu();
+      };
 
+      this.optionsScreen = function(levelMap) {
+        backToMenuBtn.onclick = that.showMainMenu;
+        //gameDivs.style(signinScreen2, { display: 'block' });
+        gameDivs.style(backToMenuBtn, { display: 'block' });
+
+        that.hideMainMenu();
       };
       
     this.startCreatedLevels = function() {
