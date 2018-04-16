@@ -483,6 +483,7 @@ function Main() {
         var directionOfCollision = that.isColliding(zombies[i], element);
 
         if (directionOfCollision == 'l' || directionOfCollision == 'r') {
+          // Zombies change direction and increase speed on every collision with an element up to a limit of 7. Then speed reverts back to normal.
           zombies[i].xVelocity *= -1.12;
           if(zombies[i].xVelocity >= 7){
               zombies[i].xVelocity = -1;
