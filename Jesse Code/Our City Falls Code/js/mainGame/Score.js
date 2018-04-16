@@ -82,7 +82,7 @@ function Score() {
     that.updateLifeCount();
   };
 
-  this.gameOverView = function() {
+  this.finalScore = function() {
     gameDivs.style(scoreWrapper, { background: 'black' });
   };
 }
