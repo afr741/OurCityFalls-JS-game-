@@ -641,8 +641,9 @@ function Main() {
   this.checkBulletEnemyCollision = function() {
     for (var i = 0; i < zombies.length; i++) {
       for (var j = 0; j < bullets.length; j++) {
+
+        // Check for collision with zombie
         if (zombies[i] && zombies[i].state != 'killed') {
-          //check for collision only if zombies exist and is not killed
           var collWithBullet = that.isColliding(zombies[i], bullets[j]);
         }
 
@@ -650,13 +651,21 @@ function Main() {
           bullets[j] = null;  //destroy bullet
           bullets.splice(j, 1);
 
-          zombies[i].state = 'killedByBullet';
+          //if zombie still has health, decrement it.
+          if(zombies[i].health != 0){
+            zombies[i].health--;
+          }
+          //else the zombie has no more health and dies.
+          else{
+            zombies[i].state = 'killedByBullet';
 
-          score.totalScore += 500;
-          score.updateTotalScore();
+            score.totalScore += 500;
+            score.updateTotalScore();
 
-          //sound when enemy dies
-          gameSound.play('killEnemy');
+            //sound when enemy dies
+            gameSound.play('killEnemy');
+          }
+          
         }
       }
     }
