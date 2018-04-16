@@ -429,9 +429,7 @@ function Main() {
         } else if(player.type == 'shotgun'){
           powerUp.armor(element.x, element.y);
           powerUps.push(powerUp);
-        } else if(player.type == 'shotgunWithArmor'){
-            
-        }
+        } 
 
        
         map[row][column] = 0; //sets to useless box after powerUp appears
@@ -469,6 +467,7 @@ function Main() {
     for (var i = 0; i < powerUps.length; i++) {
       var directionOfCollision = that.isColliding(powerUps[i], element);
 
+      // in case of moving powerup elements
       if (directionOfCollision == 'l' || directionOfCollision == 'r') {
         powerUps[i].xVelocity *= -1; //change direction if collision with any element from the side
       } else if (directionOfCollision == 'b') {
@@ -479,8 +478,8 @@ function Main() {
 
   this.isEnemyElementCollision = function(element) {
     for (var i = 0; i < zombies.length; i++) {
-      if (zombies[i].state != 'deadFromBullet') {
-        //so that zombies fall from the map when dead from bullet
+      if (zombies[i].state != 'killedByBullet') {
+        //so that zombies fall from the map when killed by bullet
         var directionOfCollision = that.isColliding(zombies[i], element);
 
         if (directionOfCollision == 'l' || directionOfCollision == 'r') {
@@ -516,12 +515,9 @@ function Main() {
           //armor
           player.type = 'armor';
         } else if (powerUps[i].type == 31 && player.type == 'armor') {
-          //shotgunWithArmor
-          player.type = 'shotgunWithArmor';
-        } else if(powerUps[i].type == 30 && player.type == 'shotgun'){
-            //shotgun no armor
-            player.type == "shotgunWithArmor";
-        }
+          //shotgun
+          player.type = 'shotgun';
+        } 
         
         else if(powerUps[i].type == 32){
           //Grenade
@@ -541,13 +537,13 @@ function Main() {
 
   this.checkEnemyPlayerCollision = function() {
     for (var i = 0; i < zombies.length; i++) {
-      if (!player.isInvincible && zombies[i].state != 'dead' && zombies[i].state != 'deadFromBullet') {
-        //if player is isInvincible or zombies state is dead, collision doesnt occur
+      if (!player.isInvincible && zombies[i].state != 'killed' && zombies[i].state != 'killedByBullet') {
+        //if player is isInvincible or zombies state is killed, collision doesnt occur
         var collisionWithPlayer = that.isColliding(zombies[i], player);
 
         if (collisionWithPlayer == 't') {
           //kill zombies if collision is from top
-          zombies[i].state = 'dead';
+          zombies[i].state = 'killed';
 
           player.yVelocity = -player.speed;
 
@@ -560,50 +556,82 @@ function Main() {
           zombies[i].xVelocity *= -1;
 
           if (player.type == 'armor') {
-            player.type = 'normal';
+            //player.type = 'normal';
             player.isInvincible = true;
             collisionWithPlayer = undefined;
+            
+            if(player.health != 0){
+              player.health--;
+              //sound when player powerDowns
+              gameSound.play('powerDown');
 
-            //sound when player powerDowns
-            gameSound.play('powerDown');
+              setTimeout(function() {
+                player.isInvincible = false;
+              }, 1000);
+            }
+            else{
+              //Player dies
+              that.pauseGame();
 
-            setTimeout(function() {
-              player.isInvincible = false;
-            }, 1000);
-          } else if (player.type == 'shotgunWithArmor') {
-            player.type = 'shotgun';
-            player.isInvincible = true;
+                player.frame = 13;
+                collisionWithPlayer = undefined;
 
-            collisionWithPlayer = undefined;
+                score.lifeCount--;
+                score.updateLifeCount();
 
-            //sound when player powerDowns
-            gameSound.play('powerDown');
+                //sound when player dies
+                gameSound.play('playerDie');
 
-            setTimeout(function() {
-              player.isInvincible = false;
-            }, 1000);
+                timeOutId = setTimeout(function() {
+                  if (score.lifeCount == 0) {
+                    that.gameOver();
+                  } else {
+                    that.resetGame();
+                  }
+                }, 3000);
+            }
+            
           } else if (player.type == 'normal' || player.type == 'shotgun' || player.type == 'grenade') {
-            //kill player if collision occurs when he is normal
-            that.pauseGame();
+              
+              //Player gains invincibility frames
+              player.isInvincible = true;
+              collisionWithPlayer = undefined; // player cannot take damage from collision with enemy
 
-            player.frame = 13;
-            collisionWithPlayer = undefined;
+              //if player health is not zero after collision, decrement player health
+              if(player.health != 0){
+                player.health--;
+                //sound when player powerDowns
+                gameSound.play('powerDown');
 
-            score.lifeCount--;
-            score.updateLifeCount();
-
-            //sound when player dies
-            gameSound.play('playerDie');
-
-            timeOutId = setTimeout(function() {
-              if (score.lifeCount == 0) {
-                that.gameOver();
-              } else {
-                that.resetGame();
+                setTimeout(function() {
+                  player.isInvincible = false;
+                }, 1000);
               }
-            }, 3000);
+              // else, player health must be zero, so player dies, loses a life and resets level.
+              else{
+                //Player dies
+                that.pauseGame();
+
+                  player.frame = 13;
+                  collisionWithPlayer = undefined;
+
+                  score.lifeCount--;
+                  score.updateLifeCount();
+
+                  //sound when player dies
+                  gameSound.play('playerDie');
+
+                  timeOutId = setTimeout(function() {
+                    if (score.lifeCount == 0) {
+                      that.gameOver();
+                    } else {
+                      that.resetGame();
+                    }
+                  }, 3000);
+              }
+            }
             break;
-          }
+          
         }
       }
     }
@@ -612,8 +640,8 @@ function Main() {
   this.checkBulletEnemyCollision = function() {
     for (var i = 0; i < zombies.length; i++) {
       for (var j = 0; j < bullets.length; j++) {
-        if (zombies[i] && zombies[i].state != 'dead') {
-          //check for collision only if zombies exist and is not dead
+        if (zombies[i] && zombies[i].state != 'killed') {
+          //check for collision only if zombies exist and is not killed
           var collWithBullet = that.isColliding(zombies[i], bullets[j]);
         }
 
@@ -621,7 +649,7 @@ function Main() {
           bullets[j] = null;  //destroy bullet
           bullets.splice(j, 1);
 
-          zombies[i].state = 'deadFromBullet';
+          zombies[i].state = 'killedByBullet';
 
           score.totalScore += 500;
           score.updateTotalScore();
@@ -665,17 +693,12 @@ function Main() {
     }
   };
 
-  //controlling player with key events
+  //controlling player with keys
   this.updatePlayer = function() {
     var friction = 0.91;
     var gravity = 0.2;
 
-    /*if(player.type == 'armor'){
-        gravity = 0.5;
-        friction = 0.60;
-    }*/
-
-    player.checkPlayerType();    //check player type: normal, armor, shotgunWithArmor, shotgunWithoutarmor grenade
+    player.checkPlayerType();    //check player type: normal, armor, shotgun, grenade
 
     if (keys[38] || keys[32]) {
       //up arrow
@@ -909,6 +932,7 @@ function Main() {
     that.init(codedLevels, currentLevel);
   };
 
+  // clear all element arrays, sounds, player, etc.
   this.clearInstances = function() {
     player = null;
     element = null;
