@@ -543,16 +543,24 @@ function Main() {
         var collisionWithPlayer = that.isColliding(zombies[i], player);
 
         if (collisionWithPlayer == 't') {
-          //kill zombies if collision is from top
-          zombies[i].state = 'killed';
+          //Do more damage to zombies if player jumps on their heads
+          if(zombies[i].health != 0){
+            zombies[i].health = zombies[i].health - 2;
+            player.yVelocity = -player.speed;
+            gameSound.play('killEnemy');
+          }
+          else{
+            zombies[i].state = 'killed';
 
-          player.yVelocity = -player.speed;
+            player.yVelocity = -player.speed;
 
-          score.totalScore += 750;    //more points for jumping on enemies versus shooting them
-          score.updateTotalScore();
+            score.totalScore += 750;    //more points for jumping on enemies versus shooting them
+            score.updateTotalScore();
 
-          //sound when enemy dies
-          gameSound.play('killEnemy');
+            //sound when enemy dies
+            gameSound.play('killEnemy');
+          }
+
         } else if (collisionWithPlayer == 'r' || collisionWithPlayer == 'l' || collisionWithPlayer == 'b') {
           zombies[i].xVelocity *= -1;
 
@@ -654,6 +662,7 @@ function Main() {
           //if zombie still has health, decrement it.
           if(zombies[i].health != 0){
             zombies[i].health--;
+            gameSound.play('killEnemy');
           }
           //else the zombie has no more health and dies.
           else{
