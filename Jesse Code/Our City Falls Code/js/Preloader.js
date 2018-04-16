@@ -34,7 +34,16 @@ function Preloader() {
       25: 'images/start-btn.png',
       26: 'images/enemies2.png',
       27: 'images/options-btn.png',
-      28: 'images/profile-btn.png'
+      28: 'images/profile-btn.png',
+      29: 'images/Conf-pass.png',
+      30: 'images/E-address.png',
+      31: 'images/forgotpass-btn.png',
+      32: 'images/password-tag.png',
+      33: 'images/Register-btn.png',
+      34: 'images/signin-btn.png',
+      35: 'images/signup-btn.png',
+      36: 'images/submit-btn.png',
+      37: 'images/userName-tag.png'
     };
 
     that.loadImages(imgSrc);
