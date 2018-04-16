@@ -14,6 +14,7 @@ function Enemy() {
     this.onGround = false;
     this.type;
     this.state;
+    this.health = 3;
   
     this.spriteX;
     this.spriteY = 0;
@@ -41,20 +42,20 @@ function Enemy() {
         that.yVelocity = 0;
       }
   
-      if (that.state == 'dead') {
+      if (that.state == 'killed') {
         that.frame = 2; //squashed zombie
   
         animationTick++;
         if (animationTick >= 60) {
           that.frame = 4;
         }
-      } else if (that.state == 'deadFromBullet') {
+      } else if (that.state == 'killedByBullet') {
         //zombie falling off screen
         that.frame = 3;
         that.yVelocity += gravity;
         that.y += that.yVelocity;
       } else {
-        //only animate when not dead
+        //only animate when not killed
         that.yVelocity += gravity;
         that.x += that.xVelocity;
         that.y += that.yVelocity;
