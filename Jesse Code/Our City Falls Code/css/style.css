@@ -66,17 +66,6 @@
   margin: 0 auto;
 
 }
-
-.optionScreen{
-  width: 1280px;
-  height: 480px;
-  border: 1px solid black;
-  border-top: none;
-  background: url('../images/background0.png.png');
-  display: none;
-  margin: 0 auto;
-}
-
 .hudWrapper {
   padding-left: 40px;
   width: 1240px;
@@ -100,7 +89,6 @@
 }
 
 .brick-score {
-  /*background: url('../images/coin.png') left center no-repeat;*/
   width: 150px;
   float: left;
   padding-left: 40px;
