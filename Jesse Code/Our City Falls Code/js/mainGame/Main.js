@@ -538,14 +538,18 @@ function Main() {
   this.checkEnemyPlayerCollision = function() {
     for (var i = 0; i < zombies.length; i++) {
       if (!player.isInvincible && zombies[i].state != 'killed' && zombies[i].state != 'killedByBullet') {
-        //if player is isInvincible or zombies state is killed, collision doesnt occur
+        //if player is isInvincible or zombies state is killed, no collision
         var collisionWithPlayer = that.isColliding(zombies[i], player);
 
         if (collisionWithPlayer == 't') {
           //Do more damage to zombies if player jumps on their heads
           if(zombies[i].health != 0){
             zombies[i].health = zombies[i].health - 2;
-            zombies[i].xVelocity = zombies[i].xVelocity * -1.1;
+
+            // zombies stunned when jumped on. (wanted to add timer so that they move again)
+            zombies[i].xVelocity = 0;
+            
+
             player.yVelocity = -player.speed * 2;
             gameSound.play('killEnemy');
           }
