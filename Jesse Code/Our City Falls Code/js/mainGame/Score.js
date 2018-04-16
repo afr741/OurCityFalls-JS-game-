@@ -3,56 +3,56 @@ function Score() {
 
   var mainWrapper;
   var scoreWrapper;
-  var coinScoreWrapper;
+  var brickWrapper;
   var totalScoreWrapper;
   var lifeCountWrapper;
   var levelWrapper;
 
-  this.coinScore;
+  this.brickScore;
   this.totalScore;
   this.lifeCount;
 
   var that = this;
 
   this.init = function() {
-    that.coinScore = 0;
+    that.brickScore = 0;
     that.totalScore = 0;
     that.lifeCount = 5;
 
     mainWrapper = gameDivs.getMainWrapper();
 
     scoreWrapper = gameDivs.create('div');
-    coinScoreWrapper = gameDivs.create('div');
+    brickWrapper = gameDivs.create('div');
     totalScoreWrapper = gameDivs.create('div');
     lifeCountWrapper = gameDivs.create('div');
     levelWrapper = gameDivs.create('div');
 
     gameDivs.addClass(scoreWrapper, 'hudWrapper');
-    gameDivs.addClass(coinScoreWrapper, 'coin-score');
+    gameDivs.addClass(brickWrapper, 'brick-score');
     gameDivs.addClass(totalScoreWrapper, 'total-score');
     gameDivs.addClass(lifeCountWrapper, 'lives');
     gameDivs.addClass(levelWrapper, 'level-num');
 
     gameDivs.append(scoreWrapper, levelWrapper);
     gameDivs.append(scoreWrapper, lifeCountWrapper);
-    gameDivs.append(scoreWrapper, coinScoreWrapper);
+    gameDivs.append(scoreWrapper, brickWrapper);
     gameDivs.append(scoreWrapper, totalScoreWrapper);
     gameDivs.append(mainWrapper, scoreWrapper);
 
-    that.updateCoinScore();
+    that.updateBrickScore();
     that.updateTotalScore();
     that.updateLifeCount();
     that.updateLevelNum(1);
   };
 
-  this.updateCoinScore = function() {
-    if (that.coinScore == 100) {
-      that.coinScore = 0;
+  this.updateBrickScore = function() {
+    if (that.brickScore == 100) {
+      that.brickScore = 0;
       that.lifeCount++;
       that.updateLifeCount();
     }
 
-    gameDivs.setHTML(coinScoreWrapper, 'Bricks: ' + that.coinScore);
+    gameDivs.setHTML(brickWrapper, 'Bricks: ' + that.brickScore);
   };
 
   this.updateTotalScore = function() {
@@ -74,10 +74,10 @@ function Score() {
   this.hideScore = function() {
     gameDivs.style(scoreWrapper, { display: 'none' });
 
-    that.coinScore = 0;
+    that.brickScore = 0;
     that.lifeCount = 5;
     that.totalScore = 0;
-    that.updateCoinScore();
+    that.updateBrickScore();
     that.updateTotalScore();
     that.updateLifeCount();
   };

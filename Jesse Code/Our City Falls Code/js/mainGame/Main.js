@@ -453,10 +453,10 @@ function Main() {
       }*/
 
       if (element.type == 2) {
-        score.coinScore++;
+        score.brickScore++;
         score.totalScore += 100;
 
-        score.updateCoinScore();
+        score.updateBrickScore();
         score.updateTotalScore();
         map[row][column] = 0;
 
