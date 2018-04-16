@@ -62,7 +62,7 @@ function Player() {
 
     };
   
-    this.resetPos = function() {
+    this.resetPlayer = function() {
       that.x = canvas.width / 10;
       that.y = canvas.height - 40;
       that.frame = 0;
