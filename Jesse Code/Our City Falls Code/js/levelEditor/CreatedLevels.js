@@ -12,7 +12,7 @@ function CreatedLevels() {
       levelsWrapper = gameDivs.create('div');
   
       gameDivs.addClass(levelsWrapper, 'levels-wrapper');
-      gameDivs.addClass(deleteAllBtn, 'delete-all-btn');
+      gameDivs.addClass(deleteAllBtn, 'delete-all-button');
       gameDivs.style(levelsWrapper, { display: 'block' });
       gameDivs.append(levelsWrapper, deleteAllBtn);
       gameDivs.append(mainWrapper, levelsWrapper);
@@ -33,7 +33,7 @@ function CreatedLevels() {
           var levelName = storage.getItemName(i);
   
           gameDivs.setHTML(levelButton, levelName);
-          gameDivs.addClass(levelButton, 'level-btn');
+          gameDivs.addClass(levelButton, 'level-button');
           gameDivs.append(levelsWrapper, levelButton);
   
           levelButton.onclick = (function(i) {
