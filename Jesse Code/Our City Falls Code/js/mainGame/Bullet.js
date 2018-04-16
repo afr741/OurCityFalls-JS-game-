@@ -16,7 +16,7 @@ function Bullet() {
   var that = this;
 
   this.init = function(x, y, direction) {
-    that.xVelocity = 10 * direction;
+    that.xVelocity = 6 * direction;
     that.yVelocity = 0;
     that.x = x + that.width;
     that.y = y + 30;
