@@ -940,7 +940,7 @@ function Main() {
   };
 
   this.gameOver = function() {
-    score.gameOverView();
+    score.finalScore();
     gameUI.makeBox(0, 0, levelWidth, height);
     gameUI.writeText('You have died.', centerOfScreen - 80, height - 300);
     gameUI.writeText('Dr. Pandemic will now take over the world', centerOfScreen - 122, height / 2);
