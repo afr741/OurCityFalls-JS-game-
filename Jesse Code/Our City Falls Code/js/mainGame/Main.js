@@ -405,7 +405,6 @@ function Main() {
 
     } else if (directionOfCollision == 'b') {
       if (element.type != 5) {
-        //only if not level end
         player.onGround = true;
         player.isJumping = false;
       }
@@ -546,15 +545,16 @@ function Main() {
           //Do more damage to zombies if player jumps on their heads
           if(zombies[i].health != 0){
             zombies[i].health = zombies[i].health - 2;
-            player.yVelocity = -player.speed;
+            zombies[i].xVelocity = zombies[i].xVelocity * -1.1;
+            player.yVelocity = -player.speed * 2;
             gameSound.play('killEnemy');
           }
           else{
             zombies[i].state = 'killed';
 
-            player.yVelocity = -player.speed;
+            player.yVelocity = -player.speed * 2;
 
-            score.totalScore += 750;    //more points for jumping on enemies versus shooting them
+            score.totalScore += 1050;    //more points for jumping on enemies versus shooting them
             score.updateTotalScore();
 
             //sound when enemy dies
@@ -580,9 +580,9 @@ function Main() {
             }
             else{
               //Player dies
-              that.pauseGame();
+              that.pauseGame(); // stop game instance
 
-                player.frame = 13;
+                player.frame = 13; // gravestone sprite
                 collisionWithPlayer = undefined;
 
                 score.lifeCount--;
@@ -593,9 +593,9 @@ function Main() {
 
                 timeOutId = setTimeout(function() {
                   if (score.lifeCount == 0) {
-                    that.gameOver();
+                    that.gameOver(); // end game if lives are empty
                   } else {
-                    that.resetGame();
+                    that.resetGame(); // else, reset the level
                   }
                 }, 3000);
             }
