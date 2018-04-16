@@ -565,20 +565,20 @@ function Main() {
           zombies[i].xVelocity *= -1;
 
           if (player.type == 'armor') {
-            //player.type = 'normal';
+            player.type = 'normal';
             player.isInvincible = true;
             collisionWithPlayer = undefined;
             
-            if(player.health != 0){
-              player.health--;
+            
+              
               //sound when player powerDowns
               gameSound.play('powerDown');
 
               setTimeout(function() {
                 player.isInvincible = false;
               }, 1000);
-            }
-            else{
+            
+            /*else{
               //Player dies
               that.pauseGame(); // stop game instance
 
@@ -598,7 +598,8 @@ function Main() {
                     that.resetGame(); // else, reset the level
                   }
                 }, 3000);
-            }
+                */
+            
             
           } else if (player.type == 'normal' || player.type == 'shotgun' || player.type == 'grenade') {
               
