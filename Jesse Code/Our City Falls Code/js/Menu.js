@@ -173,8 +173,6 @@ var Menu = (function() {
       startGameButton.onclick = function() {
         map = that.loadMainGameMap();
         that.startGame(map);
-        
-        
       };
 
       signinButton.onclick = function() {
@@ -185,18 +183,14 @@ var Menu = (function() {
         gameDivs.style(signinScreen, { display: 'block' });
 
       };
+
       signupButton.onclick = function() {
         that.hideMainMenu();
 
         backToMenuBtn.onclick = that.showMainMenu;
         gameDivs.style(signupScreen, { display: 'block' });
         gameDivs.style(backToMenuBtn, { display: 'block' });
-        
-
       };
-
-
-
     }
 
     this.loadMainGameMap = function() {
@@ -214,8 +208,6 @@ var Menu = (function() {
     this.startGame = function(levelMap) {
       backToMenuBtn.onclick = that.showMainMenu;
       gameDivs.style(backToMenuBtn, { display: 'block' });
-
-      
 
       playerGame.clearInstances();
       playerGame.init(levelMap, 1); //initiate level 1 of map

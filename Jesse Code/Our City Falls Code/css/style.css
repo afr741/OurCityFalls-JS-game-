@@ -432,8 +432,8 @@
   height: 50px;
   background: url('../images/signin-btn.png');
   position: absolute;
-  bottom: 80px;
-  left: 20px;
+  bottom: 300px;
+  left: 530px;
   color: #ffffff;
   border: none;
 }
@@ -442,8 +442,8 @@
   height: 50px;
   background: url('../images/signup-btn.png');
   position: absolute;
-  bottom: 30px;
-  left: 20px;
+  bottom: 200px;
+  left: 530px;
   color: #ffffff;
   border: none;
 }
